@@ -74,4 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    // Inject Floating Contact Buttons (if not present)
+    if (!document.querySelector('.floating-contact')) {
+        const contactDiv = document.createElement('div');
+        contactDiv.className = 'floating-contact';
+        contactDiv.innerHTML = `
+            <a href="https://zalo.me/0793889518" target="_blank" class="contact-btn zalo-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" 
+                     alt="Zalo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <span class="contact-tooltip">Chat Zalo</span>
+            </a>
+            <a href="tel:0793889518" class="contact-btn call-btn">
+                <i class="fas fa-phone-alt"></i>
+                <span class="contact-tooltip">Gọi Ngay</span>
+            </a>
+        `;
+        document.body.appendChild(contactDiv);
+    }
 });

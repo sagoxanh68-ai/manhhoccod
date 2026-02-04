@@ -883,3 +883,159 @@ img {
     /* No sticky on mobile */
   }
 }
+
+/* 
+   ---------------------------
+   FLOATING CONTACT BUTTONS 
+   ---------------------------
+*/
+.floating-contact {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  /* Right align for easier thumb access */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: relative;
+  transition: 0.3s;
+}
+
+.zalo-btn {
+  background: white;
+  border: 2px solid #0068ff;
+  overflow: hidden;
+}
+
+.zalo-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.call-btn {
+  background: #ed1c24;
+  /* Red for urgency */
+  animation: shake 2s infinite;
+}
+
+/* Tooltip */
+.contact-tooltip {
+  position: absolute;
+  right: 60px;
+  background: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+
+.contact-btn:hover .contact-tooltip {
+  opacity: 1;
+  visibility: visible;
+  right: 65px;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0) scale(1) skew(0.017rad);
+  }
+
+  25% {
+    transform: rotate(0.13rad) scale(1) skew(0.017rad);
+  }
+
+  50% {
+    transform: rotate(0) scale(1) skew(0.017rad);
+  }
+
+  75% {
+    transform: rotate(-0.13rad) scale(1) skew(0.017rad);
+  }
+
+  100% {
+    transform: rotate(0) scale(1) skew(0.017rad);
+  }
+}
+
+/* 
+   ---------------------------
+   MOBILE OPTIMIZATION FIXES 
+   ---------------------------
+*/
+@media (max-width: 900px) {
+
+  /* Typography */
+  html {
+    font-size: 15px;
+    /* Slightly smaller base font */
+  }
+
+  h1,
+  .hero-title {
+    font-size: 1.8rem !important;
+  }
+
+  h2,
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  /* Layout */
+  .section {
+    padding: 3rem 0;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+
+  /* Hero Section */
+  .hero {
+    height: auto;
+    min-height: 400px;
+    padding: 120px 0 60px;
+    /* Add top padding for fixed header */
+  }
+
+  /* Product Grid: 2 Columns on Mobile */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  .product-img-wrapper {
+    height: 180px;
+    /* Sorter images */
+  }
+
+  /* Footer */
+  .footer-top {
+    grid-template-columns: 1fr;
+    /* Stack footer columns */
+    gap: 1.5rem;
+  }
+}
