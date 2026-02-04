@@ -11,23 +11,108 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar"
-        style="position: sticky; top: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100;">
-        <div class="container navbar-container">
-            <a href="index.html" class="logo">
-                <i class="fas fa-leaf"></i> SAGO XANH
-                <span class="logo-sub">Nghệ Thuật Cảnh Quan</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Trang Chủ</a></li>
-                <li><a href="gioi-thieu.html">Giới Thiệu</a></li>
-                <li><a href="dich-vu.html">Dịch Vụ</a></li>
-                <li><a href="cua-hang.html">Cửa Hàng</a></li>
-                <li><a href="tin-tuc.html" class="active">Tin Tức</a></li>
-                <li><a href="lien-he.html">Liên Hệ</a></li>
-            </ul>
+    <header class="header">
+        <!-- 1. Top Bar -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-left">
+                    <span><i class="fas fa-map-marker-alt"></i> 86 TCH 36, P.Trung Mỹ Tây, Q.12, TP.HCM</span>
+                    <span><i class="fas fa-envelope"></i> sagoxanh68@gmail.com</span>
+                    <span><i class="fas fa-phone"></i> 079.388.9518</span>
+                </div>
+                <div class="header-top-right">
+                    Kiến tạo không gian xanh - Nâng tầm cuộc sống!
+                </div>
+            </div>
         </div>
-    </nav>
+
+        <!-- 2. Main Header -->
+        <div class="header-main">
+            <div class="container">
+                <div class="logo-container">
+                    <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary-color);"></i>
+                    <div class="logo-text">
+                        <span class="logo-title">SAGO XANH</span>
+                        <span class="logo-slogan">Nghệ Thuật Cảnh Quan</span>
+                    </div>
+                </div>
+
+                <div class="search-container">
+                    <form class="search-form">
+                        <input type="text" class="search-input" placeholder="Tìm kiếm bài viết...">
+                        <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="header-contact">
+                    <span class="header-contact-label">Hotline: 079.388.9518</span>
+                </div>
+
+                <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+            </div>
+        </div>
+
+        <!-- 3. Navigation Bar -->
+        <div class="header-nav">
+            <div class="container">
+                <nav class="nav-links">
+                    <div class="mobile-close" style="align-self: flex-end; margin-bottom: 20px; display: none;"><i
+                            class="fas fa-times"></i></div>
+
+                    <div class="nav-item">
+                        <a href="javascript:void(0)" class="nav-link"
+                            style="color: #d32f2f; font-weight: 800; border-bottom: 2px solid transparent;">DANH MỤC SẢN
+                            PHẨM <i class="fas fa-angle-down" style="font-size: 0.8em;"></i></a>
+                        <div class="dropdown-content">
+                            <a href="cua-hang.html#cay-xanh">Sản Phẩm Cây Xanh</a>
+                            <a href="cua-hang.html#ban-cong">Sản Phẩm Cây Ban Công</a>
+                            <a href="cua-hang.html#chau-xi-mang">Chậu Xi Măng Đá Mài</a>
+                            <a href="cua-hang.html#chau-composite">Chậu Composite</a>
+                            <a href="cua-hang.html#gia-the">Giá Thể Trồng Cây</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="index.html" class="nav-link">Trang Chủ</a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="gioi-thieu.html" class="nav-link">Giới Thiệu</a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="dich-vu.html" class="nav-link">Dịch Vụ <i class="fas fa-angle-down"
+                                style="font-size: 0.8em;"></i></a>
+                        <div class="dropdown-content">
+                            <a href="dich-vu.html#thiet-ke">Thiết kế & Thi công sân vườn</a>
+                            <a href="dich-vu.html#trong-cay">Trồng cây ban công</a>
+                            <a href="dich-vu.html#thue-cay">Cho thuê cây văn phòng</a>
+                            <a href="dich-vu.html#mai-tet">Cho thuê mai tết</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="cua-hang.html" class="nav-link">Cửa Hàng <i class="fas fa-angle-down"
+                                style="font-size: 0.8em;"></i></a>
+                        <div class="dropdown-content">
+                            <a href="cua-hang.html#noi-that">Cây nội thất</a>
+                            <a href="cua-hang.html#ngoai-that">Cây ngoại thất</a>
+                            <a href="cua-hang.html#xuong-rong">Xương rồng & Sen đá</a>
+                            <a href="cua-hang.html#chau-cay">Chậu cây & Phụ kiện</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="tin-tuc.html" class="nav-link active">Tin Tức</a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="lien-he.html" class="nav-link">Liên Hệ</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
     <header class="blog-header"
         style="background: linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('https://images.unsplash.com/photo-1621506821957-1b50ab77872d?q=80&w=2070&auto=format&fit=crop') center/cover;">
@@ -131,9 +216,54 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Cảnh Quan Sago Xanh. All rights reserved.</p>
+            <div class="footer-top">
+                <div>
+                    <h3 style="color: white; margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.5rem;">
+                        CẢNH QUAN SAGO XANH</h3>
+                    <p style="opacity: 0.8; margin-bottom: 1rem;">Không gian xanh cho cuộc sống an lành.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="#" style="color: white;"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" style="color: white;"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" style="color: white;"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Liên Hệ</h4>
+                    <ul class="footer-links" style="opacity: 0.9;">
+                        <li><i class="fas fa-map-marker-alt"></i> 86 TCH 36, P. Trung Mỹ Tây, Q.12, TP.HCM</li>
+                        <li><i class="fas fa-phone"></i> 079.388.9518</li>
+                        <li><i class="fas fa-envelope"></i> sagoxanh68@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Dịch Vụ</h4>
+                    <ul class="footer-links">
+                        <li><a href="dich-vu.html">Thiết kê sân vườn</a></li>
+                        <li><a href="dich-vu.html">Trồng cây ban công</a></li>
+                        <li><a href="dich-vu.html">Cho thuê cây văn phòng</a></li>
+                        <li><a href="dich-vu.html">Cho thuê mai tết</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CẢNH QUAN SAGO XANH. All rights reserved.</p>
+            </div>
         </div>
     </footer>
+    <!-- Floating Contact Buttons -->
+    <div class="floating-contact">
+        <a href="https://zalo.me/0793889518" target="_blank" class="contact-btn zalo-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png"
+                alt="Zalo" style="width: 30px; height: 30px; object-fit: contain;">
+            <span class="contact-tooltip">Chat Zalo</span>
+        </a>
+        <a href="tel:0793889518" class="contact-btn call-btn">
+            <i class="fas fa-phone-alt"></i>
+            <span class="contact-tooltip">Gọi Ngay</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
