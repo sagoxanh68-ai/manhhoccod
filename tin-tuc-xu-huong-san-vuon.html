@@ -7,64 +7,12 @@
     <title>Xu Hướng Sân Vườn Nhiệt Đới 2026 - Cảnh Quan Sago Xanh</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .blog-header {
-            background: linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('https://images.unsplash.com/photo-1557429287-b2e26467fc2b?q=80&w=1935&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
-        }
-
-        .blog-content {
-            max-width: 800px;
-            margin: -60px auto 4rem;
-            background: white;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .blog-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1rem;
-        }
-
-        .blog-content h2 {
-            color: var(--primary-color);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .blog-content p {
-            margin-bottom: 1rem;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        .blog-content img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar" style="position: sticky; top: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <nav class="navbar"
+        style="position: sticky; top: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100;">
         <div class="container navbar-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-leaf"></i> SAGO XANH
@@ -82,60 +30,106 @@
     </nav>
 
     <!-- Header -->
-    <header class="blog-header">
+    <header class="blog-header"
+        style="background: linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('https://images.unsplash.com/photo-1557429287-b2e26467fc2b?q=80&w=1935&auto=format&fit=crop') center/cover;">
         <div class="container">
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Xu Hướng Sân Vườn Nhiệt Đới 2026</h1>
             <p style="font-size: 1.2rem; opacity: 0.9;">Đưa thiên nhiên vào từng ngóc ngách của không gian sống</p>
         </div>
     </header>
 
-    <!-- Content -->
-    <article class="blog-content">
-        <div class="blog-meta">
-            <span><i class="far fa-calendar-alt"></i> 28 Tháng 1, 2026</span>
-            <span><i class="far fa-user"></i> Kiến Trúc Sư Minh Tú</span>
-            <span><i class="far fa-folder"></i> Xu Hướng Thiết Kế</span>
-        </div>
+    <div class="blog-wrapper">
+        <main class="blog-main">
+            <!-- TOC -->
+            <div class="toc-box">
+                <div class="toc-header"><i class="fas fa-list-ul"></i> Mục Lục</div>
+                <ul class="toc-list">
+                    <li><a href="#muc-1">1. Cây Lá Rộng & Mật Độ Dày</a></li>
+                    <li><a href="#muc-2">2. Vật Liệu Tự Nhiên (Gỗ, Đá, Sỏi)</a></li>
+                    <li><a href="#muc-3">3. Yếu Tố Nước (Water Features)</a></li>
+                    <li><a href="#muc-4">4. Góc Thư Giãn Ngoài Trời</a></li>
+                </ul>
+            </div>
 
-        <p class="lead" style="font-size: 1.1rem; font-weight: 500; color: #444;">Năm 2026 đánh dấu sự lên ngôi mạnh mẽ
-            của phong cách Tropical (Nhiệt Đới). Không còn là những khu vườn kiểu cách cầu kỳ, xu hướng năm nay hướng về
-            sự tự nhiên, phóng khoáng và chữa lành tâm hồn.</p>
+            <div class="blog-meta">
+                <span><i class="far fa-calendar-alt"></i> 28 Tháng 1, 2026</span>
+                <span><i class="far fa-user"></i> Kiến Trúc Sư Minh Tú</span>
+                <span><i class="far fa-folder"></i> Xu Hướng Thiết Kế</span>
+            </div>
 
-        <h2>1. Cây Lá Rộng & Mật Độ Dày</h2>
-        <img src="https://images.unsplash.com/photo-1584589167171-541ce45f1eea?q=80&w=1974&auto=format&fit=crop"
-            alt="Cây nhiệt đới lá rộng">
-        <p>Đặc trưng của khu vườn nhiệt đới là sự "rậm rạp" có chủ đích. Những loại cây lá to như Chuối Rẻ Quạt, Môn
-            Quan Âm, hay các loại cây họ Ráy (Alocasia) được ưu tiên sử dụng để tạo cảm giác như đang lạc vào một khu
-            rừng nhiệt đới thu nhỏ.</p>
+            <p class="lead" style="font-size: 1.1rem; font-weight: 500; color: #444;">Năm 2026 đánh dấu sự lên ngôi mạnh
+                mẽ của phong cách Tropical (Nhiệt Đới). Không còn là những khu vườn kiểu cách cầu kỳ, xu hướng năm nay
+                hướng về sự tự nhiên, phóng khoáng và chữa lành tâm hồn.</p>
 
-        <h2>2. Vật Liệu Tự Nhiên (Gỗ, Đá, Sỏi)</h2>
-        <p>Bê tông và kim loại dần nhường chỗ cho gỗ mộc, đá ong xám và sỏi cuội. Lối đi rải sỏi kết hợp với những phiến
-            đá bước đi tự nhiên (stepping stones) là điểm nhấn không thể thiếu trong các thiết kế của Sago Xanh năm nay.
-        </p>
+            <h2 id="muc-1">1. Cây Lá Rộng & Mật Độ Dày</h2>
+            <img src="https://images.unsplash.com/photo-1584589167171-541ce45f1eea?q=80&w=1974&auto=format&fit=crop"
+                alt="Cây nhiệt đới lá rộng">
+            <p>Đặc trưng của khu vườn nhiệt đới là sự "rậm rạp" có chủ đích. Những loại cây lá to như Chuối Rẻ Quạt, Môn
+                Quan Âm, hay các loại cây họ Ráy (Alocasia) được ưu tiên sử dụng để tạo cảm giác như đang lạc vào một
+                khu rừng nhiệt đới thu nhỏ.</p>
 
-        <h2>3. Yếu Tố Nước (Water Features)</h2>
-        <img src="https://images.unsplash.com/photo-1543362174-8846c4f93288?q=80&w=2070&auto=format&fit=crop"
-            alt="Tiểu cảnh nước">
-        <p>Tiếng nước chảy róc rách là liều thuốc tinh thần tuyệt vời. Dù là một hồ cá Koi lớn hay chỉ là một chum nước
-            tiểu cảnh nhỏ, yếu tố Thủy luôn mang lại sinh khí và sự mát mẻ cho khu vườn.</p>
+            <h2 id="muc-2">2. Vật Liệu Tự Nhiên (Gỗ, Đá, Sỏi)</h2>
+            <p>Bê tông và kim loại dần nhường chỗ cho gỗ mộc, đá ong xám và sỏi cuội. Lối đi rải sỏi kết hợp với những
+                phiến đá bước đi tự nhiên (stepping stones) là điểm nhấn không thể thiếu trong các thiết kế của Sago
+                Xanh năm nay.</p>
 
-        <h2>4. Góc Thư Giãn Ngoài Trời (Outdoor Living)</h2>
-        <p>Sân vườn không chỉ để ngắm mà là nơi để sống. Xu hướng tạo ra các "phòng khách ngoài trời" với bộ bàn ghế
-            mây, mái che pergola và đèn dây trang trí đang rất được ưa chuộng.</p>
+            <h2 id="muc-3">3. Yếu Tố Nước (Water Features)</h2>
+            <img src="https://images.unsplash.com/photo-1543362174-8846c4f93288?q=80&w=2070&auto=format&fit=crop"
+                alt="Tiểu cảnh nước">
+            <p>Tiếng nước chảy róc rách là liều thuốc tinh thần tuyệt vời. Dù là một hồ cá Koi lớn hay chỉ là một chum
+                nước tiểu cảnh nhỏ, yếu tố Thủy luôn mang lại sinh khí và sự mát mẻ cho khu vườn.</p>
 
-        <div
-            style="background: #f8f9fa; padding: 1.5rem; border-left: 4px solid var(--primary-color); margin-top: 2rem;">
-            <h3>Liên Hệ Thiết Kế</h3>
-            <p style="margin-bottom: 0;">Bạn muốn sở hữu một khu vườn nhiệt đới đúng chuẩn? Hãy liên hệ ngay với Sago
-                Xanh để được tư vấn và lên bản vẽ 3D miễn phí!</p>
-        </div>
+            <h2 id="muc-4">4. Góc Thư Giãn Ngoài Trời (Outdoor Living)</h2>
+            <p>Sân vườn không chỉ để ngắm mà là nơi để sống. Xu hướng tạo ra các "phòng khách ngoài trời" với bộ bàn ghế
+                mây, mái che pergola và đèn dây trang trí đang rất được ưa chuộng.</p>
 
-        <div style="margin-top: 3rem; text-align: center;">
-            <a href="tin-tuc.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại Tin Tức</a>
-            <a href="dich-vu.html" class="btn btn-primary" style="margin-left: 1rem;">Đăng Ký Khảo Sát <i
-                    class="fas fa-drafting-compass"></i></a>
-        </div>
-    </article>
+            <div class="highlight-box">
+                <h3>Liên Hệ Thiết Kế</h3>
+                <p style="margin-bottom: 0;">Bạn muốn sở hữu một khu vườn nhiệt đới đúng chuẩn? Hãy liên hệ ngay với
+                    Sago Xanh để được tư vấn và lên bản vẽ 3D miễn phí!</p>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="tin-tuc.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại Tin Tức</a>
+                <a href="dich-vu.html" class="btn btn-primary" style="margin-left: 1rem;">Đăng Ký Khảo Sát <i
+                        class="fas fa-drafting-compass"></i></a>
+            </div>
+        </main>
+
+        <aside class="blog-sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Sản Phẩm Nổi Bật</h3>
+                <a href="cua-hang.html" class="mini-product">
+                    <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=1964&auto=format&fit=crop"
+                        alt="Monstera">
+                    <div class="mini-product-info">
+                        <h4 class="mini-product-title">Monstera Trầu Bà</h4>
+                        <span class="mini-product-price">250.000₫</span>
+                    </div>
+                </a>
+                <a href="cua-hang.html" class="mini-product">
+                    <img src="https://images.unsplash.com/photo-1596726618934-924b1723db80?q=80&w=2070&auto=format&fit=crop"
+                        alt="Trầu Bà">
+                    <div class="mini-product-info">
+                        <h4 class="mini-product-title">Trầu Bà Leo Cột</h4>
+                        <span class="mini-product-price">180.000₫</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Bài Viết Mới</h3>
+                <a href="chi-tiet-tin-tuc.html" class="mini-news-item">
+                    <h4 class="mini-news-title">Top 5 Loại Cây Lọc Không Khí Tốt Nhất</h4>
+                    <span class="mini-news-date"><i class="far fa-clock"></i> 04 Th2, 2026</span>
+                </a>
+                <a href="tin-tuc-cham-soc-kim-tien.html" class="mini-news-item">
+                    <h4 class="mini-news-title">Bí Quyết Chăm Sóc Cây Kim Tiền</h4>
+                    <span class="mini-news-date"><i class="far fa-clock"></i> 15 Th1, 2026</span>
+                </a>
+            </div>
+        </aside>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

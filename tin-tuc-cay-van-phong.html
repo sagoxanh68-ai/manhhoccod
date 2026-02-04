@@ -7,64 +7,12 @@
     <title>Vì Sao Văn Phòng Cần Có Cây Xanh? - Cảnh Quan Sago Xanh</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .blog-header {
-            background: linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('https://images.unsplash.com/photo-1599480170428-b42e74070a98?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
-        }
-
-        .blog-content {
-            max-width: 800px;
-            margin: -60px auto 4rem;
-            background: white;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .blog-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1rem;
-        }
-
-        .blog-content h2 {
-            color: var(--primary-color);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .blog-content p {
-            margin-bottom: 1rem;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        .blog-content img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar" style="position: sticky; top: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <nav class="navbar"
+        style="position: sticky; top: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100;">
         <div class="container navbar-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-leaf"></i> SAGO XANH
@@ -81,8 +29,8 @@
         </div>
     </nav>
 
-    <!-- Header -->
-    <header class="blog-header">
+    <header class="blog-header"
+        style="background: linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('https://images.unsplash.com/photo-1599480170428-b42e74070a98?q=80&w=2070&auto=format&fit=crop') center/cover;">
         <div class="container">
             <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Cây Xanh Văn Phòng: Đầu Tư Nhỏ, Lợi Ích Lớn</h1>
             <p style="font-size: 1.2rem; opacity: 0.9;">Tăng năng suất làm việc và sức khỏe nhân viên nhờ không gian
@@ -90,49 +38,94 @@
         </div>
     </header>
 
-    <!-- Content -->
-    <article class="blog-content">
-        <div class="blog-meta">
-            <span><i class="far fa-calendar-alt"></i> 02 Tháng 1, 2026</span>
-            <span><i class="far fa-user"></i> Sago Xanh Team</span>
-            <span><i class="far fa-folder"></i> Không Gian Làm Việc</span>
-        </div>
+    <div class="blog-wrapper">
+        <main class="blog-main">
+            <div class="toc-box">
+                <div class="toc-header"><i class="fas fa-list-ul"></i> Mục Lục</div>
+                <ul class="toc-list">
+                    <li><a href="#muc-1">1. Giảm Stress & Mỏi Mắt</a></li>
+                    <li><a href="#muc-2">2. Lọc Không Khí & Bức Xạ</a></li>
+                    <li><a href="#muc-3">3. Tăng Độ Ẩm & Giảm Tiếng Ồn</a></li>
+                    <li><a href="#muc-4">4. Nâng Cao Mỹ Quan & Tuyển Dụng</a></li>
+                </ul>
+            </div>
 
-        <p class="lead" style="font-size: 1.1rem; font-weight: 500; color: #444;">Bạn có biết rằng, chỉ cần thêm vài
-            chậu cây xanh vào văn phòng có thể tăng năng suất làm việc lên đến 15%? Dưới đây là những lý do tại sao mọi
-            văn phòng hiện đại đều đang "xanh hóa".</p>
+            <div class="blog-meta">
+                <span><i class="far fa-calendar-alt"></i> 02 Tháng 1, 2026</span>
+                <span><i class="far fa-user"></i> Sago Xanh Team</span>
+                <span><i class="far fa-folder"></i> Không Gian Làm Việc</span>
+            </div>
 
-        <h2>1. Giảm Stress & Mỏi Mắt</h2>
-        <p>Màu xanh lá cây là màu thư giãn nhất cho mắt. Sau hàng giờ nhìn vào màn hình máy tính, việc ngắm nhìn một
-            chậu cây xanh sẽ giúp mắt được nghỉ ngơi, giảm căng thẳng thần kinh ngay lập tức.</p>
+            <p class="lead" style="font-size: 1.1rem; font-weight: 500; color: #444;">Bạn có biết rằng, chỉ cần thêm vài
+                chậu cây xanh vào văn phòng có thể tăng năng suất làm việc lên đến 15%? Dưới đây là những lý do tại sao
+                mọi văn phòng hiện đại đều đang "xanh hóa".</p>
 
-        <h2>2. Lọc Không Khí & Bức Xạ</h2>
-        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop"
-            alt="Văn phòng xanh hiện đại">
-        <p>Văn phòng kín thường chứa nhiều chất độc hại như Benzene, Formaldehyde thải ra từ thảm, máy in. Các loại cây
-            như Trầu Bà, Lưỡi Hổ, Lan Ý đóng vai trò như lá phổi tự nhiên, hấp thụ khí độc và nhả Oxy sạch.</p>
+            <h2 id="muc-1">1. Giảm Stress & Mỏi Mắt</h2>
+            <p>Màu xanh lá cây là màu thư giãn nhất cho mắt. Sau hàng giờ nhìn vào màn hình máy tính, việc ngắm nhìn một
+                chậu cây xanh sẽ giúp mắt được nghỉ ngơi, giảm căng thẳng thần kinh ngay lập tức.</p>
 
-        <h2>3. Tăng Độ Ẩm & Giảm Tiếng Ồn</h2>
-        <p>Máy lạnh làm không khí khô, dễ gây bệnh hô hấp và khô da. Cây xanh tỏa hơi nước giúp cân bằng độ ẩm. Ngoài
-            ra, tán lá cây còn có tác dụng hấp thụ âm thanh, giảm tiếng ồn vang vọng trong phòng kín.</p>
+            <h2 id="muc-2">2. Lọc Không Khí & Bức Xạ</h2>
+            <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop"
+                alt="Văn phòng xanh hiện đại">
+            <p>Văn phòng kín thường chứa nhiều chất độc hại như Benzene, Formaldehyde thải ra từ thảm, máy in. Các loại
+                cây như Trầu Bà, Lưỡi Hổ, Lan Ý đóng vai trò như lá phổi tự nhiên, hấp thụ khí độc và nhả Oxy sạch.</p>
 
-        <h2>4. Nâng Cao Mỹ Quan & Tuyển Dụng</h2>
-        <p>Một văn phòng xanh mướt, đẹp mắt không chỉ gây ấn tượng với khách hàng, đối tác mà còn thu hút nhân tài. Nhân
-            viên luôn muốn làm việc trong một môi trường đẹp, thoải mái và quan tâm đến sức khỏe của họ.</p>
+            <h2 id="muc-3">3. Tăng Độ Ẩm & Giảm Tiếng Ồn</h2>
+            <p>Máy lạnh làm không khí khô, dễ gây bệnh hô hấp và khô da. Cây xanh tỏa hơi nước giúp cân bằng độ ẩm.
+                Ngoài ra, tán lá cây còn có tác dụng hấp thụ âm thanh, giảm tiếng ồn vang vọng trong phòng kín.</p>
 
-        <div
-            style="background: #f8f9fa; padding: 1.5rem; border-left: 4px solid var(--primary-color); margin-top: 2rem;">
-            <h3>Giải Pháp Cho Thuê Cây Văn Phòng</h3>
-            <p style="margin-bottom: 0;">Sago Xanh cung cấp dịch vụ cho thuê cây trọn gói: Miễn phí khảo sát thiết kế,
-                miễn phí vận chuyển, có nhân viên đến chăm sóc định kỳ hàng tuần. Cây chết được thay miễn phí!</p>
-        </div>
+            <h2 id="muc-4">4. Nâng Cao Mỹ Quan & Tuyển Dụng</h2>
+            <p>Một văn phòng xanh mướt, đẹp mắt không chỉ gây ấn tượng với khách hàng, đối tác mà còn thu hút nhân tài.
+                Nhân viên luôn muốn làm việc trong một môi trường đẹp, thoải mái và quan tâm đến sức khỏe của họ.</p>
 
-        <div style="margin-top: 3rem; text-align: center;">
-            <a href="tin-tuc.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại Tin Tức</a>
-            <a href="dich-vu.html" class="btn btn-primary" style="margin-left: 1rem;">Nhận Báo Giá Thuê Cây <i
-                    class="fas fa-file-invoice-dollar"></i></a>
-        </div>
-    </article>
+            <div class="highlight-box">
+                <h3>Giải Pháp Cho Thuê Cây Văn Phòng</h3>
+                <p style="margin-bottom: 0;">Sago Xanh cung cấp dịch vụ cho thuê cây trọn gói: Miễn phí khảo sát thiết
+                    kế, miễn phí vận chuyển, có nhân viên đến chăm sóc định kỳ hàng tuần. Cây chết được thay miễn phí!
+                </p>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="tin-tuc.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại Tin Tức</a>
+                <a href="dich-vu.html" class="btn btn-primary" style="margin-left: 1rem;">Nhận Báo Giá Thuê Cây <i
+                        class="fas fa-file-invoice-dollar"></i></a>
+            </div>
+        </main>
+
+        <aside class="blog-sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Cây Văn Phòng Hot</h3>
+                <a href="cua-hang.html" class="mini-product">
+                    <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=1964&auto=format&fit=crop"
+                        alt="Monstera">
+                    <div class="mini-product-info">
+                        <h4 class="mini-product-title">Monstera Trầu Bà</h4>
+                        <span class="mini-product-price">250.000₫</span>
+                    </div>
+                </a>
+                <a href="cua-hang.html" class="mini-product">
+                    <img src="https://images.unsplash.com/photo-1612363228186-2150334863f6?q=80&w=2070&auto=format&fit=crop"
+                        alt="Kim Tiền">
+                    <div class="mini-product-info">
+                        <h4 class="mini-product-title">Kim Tiền Tài Lộc</h4>
+                        <span class="mini-product-price">180.000₫</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Bài Viết Mới</h3>
+                <a href="tin-tuc-vuon-rau-ban-cong.html" class="mini-news-item">
+                    <h4 class="mini-news-title">Biến Ban Công Thành Vườn Rau Xanh</h4>
+                    <span class="mini-news-date"><i class="far fa-clock"></i> 10 Th1, 2026</span>
+                </a>
+                <a href="chi-tiet-tin-tuc.html" class="mini-news-item">
+                    <h4 class="mini-news-title">Top 5 Loại Cây Lọc Không Khí</h4>
+                    <span class="mini-news-date"><i class="far fa-clock"></i> 04 Th2, 2026</span>
+                </a>
+            </div>
+        </aside>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
