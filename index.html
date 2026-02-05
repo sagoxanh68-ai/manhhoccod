@@ -179,7 +179,7 @@
 
     <!-- Hero Section -->
     <section class="hero"
-        style="background-image: url('https://images.unsplash.com/photo-1585320806295-9e9e1b78913b?q=80&w=2074&auto=format&fit=crop');">
+        style="background-color: #0b5e28; background-image: url('https://images.unsplash.com/photo-1585320806295-9e9e1b78913b?q=80&w=2074&auto=format&fit=crop');">
         <div class="container hero-content">
             <h4 class="hero-subtitle">CẢNH QUAN SAGO XANH</h4>
             <h1 class="hero-title">Thiết Kế & Thi Công Sân Vườn Chuyên Nghiệp</h1>
@@ -459,6 +459,10 @@
                 <p style="text-align: center; color: #666; width: 100%;">Đang tải tin tức mới nhất...</p>
                 <!-- Dynamic Content Will Be Injected Here -->
             </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="tin-tuc.html" class="btn btn-outline-primary">Xem Tất Cả Tin Tức <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
         </div>
     </section>
 
@@ -531,114 +535,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
-    <script>
-        // Homepage specific logic: Load featured products
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('home-product-grid');
-            if (!grid) return;
-
-            // Helper to format price
-            function formatPrice(price) {
-                if (!price) return 'Liên hệ';
-                const num = parseInt(String(price).replace(/\D/g, ''));
-                if (isNaN(num)) return price;
-                return num.toLocaleString('vi-VN') + 'đ';
-            }
-
-            db.collection("products")
-                .orderBy("createdAt", "desc")
-                .limit(4)
-                .get()
-                .then((querySnapshot) => {
-                    grid.innerHTML = ''; // Clear loading text
-
-                    if (querySnapshot.empty) {
-                        grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">Chưa có sản phẩm nào.</p>';
-                        return;
-                    }
-
-                    querySnapshot.forEach((doc) => {
-                        const product = doc.data();
-                        const imgUrl = product.image || 'https://via.placeholder.com/300?text=No+Image';
-
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
-                        <div class="product-img-wrapper">
-                            <a href="chi-tiet-san-pham.html?id=${doc.id}">
-                                <img src="${imgUrl}" alt="${product.name}" class="product-img" onerror="this.src='https://via.placeholder.com/300?text=Error'">
-                            </a>
-                        </div>
-                        <div class="product-info">
-                            <h4 class="product-title"><a href="chi-tiet-san-pham.html?id=${doc.id}" style="text-decoration: none; color: inherit;">${product.name}</a></h4>
-                            <div class="product-price">${formatPrice(product.price)}</div>
-                             <div style="display: flex; gap: 5px; margin-top: 10px;">
-                                <a href="chi-tiet-san-pham.html?id=${doc.id}" class="btn btn-sm btn-outline-primary" 
-                                   style="flex: 1; text-align: center; border: 1px solid var(--primary-color); background: white; color: var(--primary-color);">
-                                   Chi Tiết
-                                </a>
-                            </div>
-                        </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error loading home products:", error);
-                    grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1; color: red;">Lỗi tải sản phẩm.</p>';
-                });
-
-            // Homepage specific logic: Load featured news (Limit 3)
-            const newsGrid = document.getElementById('homeNewsGrid');
-            if (newsGrid) {
-                db.collection("news")
-                    .orderBy("createdAt", "desc")
-                    .limit(3)
-                    .get()
-                    .then((querySnapshot) => {
-                        if (querySnapshot.empty) {
-                            newsGrid.innerHTML = '<p style="text-align: center; color: #666; width: 100%;">Chưa có tin tức nào.</p>';
-                            return;
-                        }
-
-                        let html = '';
-                        querySnapshot.forEach((doc) => {
-                            const news = doc.data();
-                            html += `
-                            <div style="box-shadow: var(--shadow-sm); border-radius: 8px; overflow: hidden; background: white; height: 100%; display: flex; flex-direction: column;">
-                                <img src="${news.image || 'https://via.placeholder.com/400x200'}" 
-                                     style="height: 200px; width: 100%; object-fit: cover;">
-                                <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                    <div>
-                                        <h4 style="margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${news.title}</h4>
-                                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${news.excerpt || ''}</p>
-                                    </div>
-                                    <a href="chi-tiet-tin-tuc.html?id=${doc.id}" style="color: var(--primary-color); font-weight: 600;">Đọc thêm <i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                            `;
-                        });
-                        newsGrid.innerHTML = html;
-                    })
-                    .catch(error => {
-                        console.error("Error loading home news:", error);
-                        newsGrid.innerHTML = '<p style="text-align: center; color: red; width: 100%;">Lỗi tải tin tức.</p>';
-                    });
-            }
-        });
-                                </a >
-                            </div >
-                        </div >
-                    `;
-                        grid.appendChild(card);
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error loading home products:", error);
-                    grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1; color: red;">Lỗi tải sản phẩm.</p>';
-                });
-        });
-    </script>
+    <script src="home.js"></script>
 </body>
 
 </html>

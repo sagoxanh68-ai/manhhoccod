@@ -45,7 +45,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             contentHtml = contentHtml.split('\n').map(para => para.trim() ? `<p>${para}</p>` : '').join('');
         }
 
-        document.getElementById('newsContent').innerHTML = contentHtml;
+        const contentContainer = document.getElementById('newsContent');
+        contentContainer.innerHTML = contentHtml;
+
+        // --- Auto Generate TOC ---
+        const headings = contentContainer.querySelectorAll('h2, h3');
+        const tocContainer = document.getElementById('dynamicTOC');
+        const tocList = document.getElementById('tocList');
+
+        if (headings.length > 0 && tocContainer) {
+            tocContainer.style.display = 'block';
+            tocList.innerHTML = '';
+
+            headings.forEach((heading, index) => {
+                // Create ID if missing
+                if (!heading.id) {
+                    heading.id = `toc-item-${index}`;
+                }
+
+                const li = document.createElement('li');
+                li.style.marginBottom = '8px';
+
+                const a = document.createElement('a');
+                a.href = `#${heading.id}`;
+                a.innerText = heading.innerText;
+                a.style.color = '#333';
+                a.style.textDecoration = 'none';
+                a.style.transition = 'color 0.2s';
+
+                a.onmouseover = () => a.style.color = 'var(--primary-color)';
+                a.onmouseout = () => a.style.color = '#333';
+
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    document.getElementById(heading.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+
+                // Indent h3
+                if (heading.tagName.toLowerCase() === 'h3') {
+                    li.style.marginLeft = '20px';
+                    a.style.fontSize = '0.95em';
+                }
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+        // -------------------------
 
 
         // 4. Initialize Comments with correct ID

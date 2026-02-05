@@ -15,4 +15,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+// Expose to window to ensure global access
+window.db = db;
+window.storage = storage;
+
 console.log("Firebase Connected!");
