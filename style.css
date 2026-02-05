@@ -290,6 +290,8 @@ img {
   border-bottom: 1px solid #eee;
   /* Optional definition */
   background: white;
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-links {
