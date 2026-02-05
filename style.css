@@ -1296,7 +1296,77 @@ img {
   color: #d32f2f;
 }
 
-.no-comments {
-  color: #888;
-  font-style: italic;
+/* Tablet (iPad Landscape) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 20px;
+    max-width: 960px;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+  }
+
+  .blog-wrapper {
+    gap: 2rem;
+  }
+}
+
+/* Tablet (iPad Portrait) & Mobile */
+@media (max-width: 768px) {
+  .blog-wrapper {
+    grid-template-columns: 1fr;
+    /* Stack content */
+  }
+
+  .blog-sidebar {
+    position: static;
+    /* No sticky on mobile */
+    margin-top: 2rem;
+  }
+
+  .header-main .container {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .logo-container {
+    margin-bottom: 1rem;
+  }
+}
+
+/* TOC Styles (Fixed) */
+.toc-box {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.toc-header {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toc-list {
+  list-style: none;
+  border-left: 2px solid #ddd;
+  padding-left: 1rem;
+  margin-top: 1rem;
+  /* Animate expand/collapse */
+  transform-origin: top;
+  transition: all 0.3s ease-out;
+  overflow: hidden;
+  /* Essential for height animation if we used max-height, but display:none is used in JS */
+}
+
+.toc-list li {
+  margin-bottom: 0.8rem;
 }

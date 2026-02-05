@@ -91,4 +91,32 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(contactDiv);
     }
+
+    // TOC Toggle Logic
+    const tocHeader = document.querySelector('.toc-header');
+    const tocList = document.querySelector('.toc-list');
+
+    if (tocHeader && tocList) {
+        // Add toggle icon
+        const toggleIcon = document.createElement('i');
+        toggleIcon.className = 'fas fa-chevron-up'; // Default state is expanded
+        toggleIcon.style.float = 'right';
+        toggleIcon.style.transition = '0.3s';
+        tocHeader.appendChild(toggleIcon);
+
+        // Make header clickable
+        tocHeader.style.cursor = 'pointer';
+
+        tocHeader.addEventListener('click', () => {
+            if (tocList.style.display === 'none') {
+                // Expand
+                tocList.style.display = 'block';
+                toggleIcon.style.transform = 'rotate(0deg)';
+            } else {
+                // Collapse
+                tocList.style.display = 'none';
+                toggleIcon.style.transform = 'rotate(180deg)';
+            }
+        });
+    }
 });
