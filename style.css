@@ -1370,3 +1370,7 @@ img {
 .toc-list li {
   margin-bottom: 0.8rem;
 }
+
+.toc-list.hidden {
+  display: none;
+}

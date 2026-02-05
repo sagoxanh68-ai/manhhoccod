@@ -1,0 +1,64 @@
+// news-detail.js
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Get ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+        document.getElementById('newsContent').innerHTML = '<p class="status-message error">Không tìm thấy bài viết (Thiếu ID).</p>';
+        return;
+    }
+
+    try {
+        // 2. Fetch Data
+        const doc = await db.collection("news").doc(id).get();
+
+        if (!doc.exists) {
+            document.getElementById('newsContent').innerHTML = '<p class="status-message error">Bài viết không tồn tại hoặc đã bị xóa.</p>';
+            return;
+        }
+
+        const news = doc.data();
+
+        // 3. Render Content
+        document.title = news.title + " - Sago Xanh";
+        document.getElementById('newsTitle').innerText = news.title;
+        document.getElementById('newsExcerpt').innerText = news.excerpt || '';
+
+        // Update header background if image exists
+        if (news.image) {
+            document.getElementById('newsHeader').style.backgroundImage = `linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('${news.image}')`;
+        }
+
+        // Date
+        const date = news.createdAt ? new Date(news.createdAt.seconds * 1000).toLocaleDateString('vi-VN') : 'Vừa cập nhật';
+        document.getElementById('newsDate').innerHTML = `<i class="far fa-calendar-alt"></i> ${date}`;
+
+        // Content (Rich text support basic)
+        // Since we used a simple textarea in Admin, newlines are \n. We should convert them to <br> or <p>
+        // But if user pasted HTML, valid.
+        // Let's do simple formatting: Split by double newline -> paragraphs
+        let contentHtml = news.content;
+
+        // Basic Auto-Format if not HTML
+        if (!contentHtml.trim().startsWith('<')) {
+            contentHtml = contentHtml.split('\n').map(para => para.trim() ? `<p>${para}</p>` : '').join('');
+        }
+
+        document.getElementById('newsContent').innerHTML = contentHtml;
+
+
+        // 4. Initialize Comments with correct ID
+        if (window.CommentSystem) {
+            new CommentSystem({
+                contextId: id, // Use the real News ID
+                containerId: 'comment-section'
+            });
+        }
+
+
+    } catch (error) {
+        console.error("Error fetching news detail:", error);
+        document.getElementById('newsContent').innerHTML = '<p class="status-message error">Lỗi tải dữ liệu. Vui lòng thử lại sau.</p>';
+    }
+});

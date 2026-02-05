@@ -93,30 +93,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // TOC Toggle Logic
-    const tocHeader = document.querySelector('.toc-header');
-    const tocList = document.querySelector('.toc-list');
+    // TOC Toggle Logic
+    const tocHeaders = document.querySelectorAll('.toc-header');
 
-    if (tocHeader && tocList) {
-        // Add toggle icon
-        const toggleIcon = document.createElement('i');
-        toggleIcon.className = 'fas fa-chevron-up'; // Default state is expanded
-        toggleIcon.style.float = 'right';
-        toggleIcon.style.transition = '0.3s';
-        tocHeader.appendChild(toggleIcon);
+    tocHeaders.forEach(header => {
+        // Prevent duplicate icons
+        if (header.querySelector('.fa-chevron-up')) return;
 
-        // Make header clickable
-        tocHeader.style.cursor = 'pointer';
+        const list = header.nextElementSibling; // toc-list should be immediately after header
 
-        tocHeader.addEventListener('click', () => {
-            if (tocList.style.display === 'none') {
-                // Expand
-                tocList.style.display = 'block';
-                toggleIcon.style.transform = 'rotate(0deg)';
-            } else {
-                // Collapse
-                tocList.style.display = 'none';
-                toggleIcon.style.transform = 'rotate(180deg)';
-            }
-        });
-    }
+        if (list && list.classList.contains('toc-list')) {
+            // Add toggle icon
+            const toggleIcon = document.createElement('i');
+            toggleIcon.className = 'fas fa-chevron-up';
+            toggleIcon.style.float = 'right';
+            toggleIcon.style.transition = 'transform 0.3s';
+            header.appendChild(toggleIcon);
+
+            // Make header clickable
+            header.style.cursor = 'pointer';
+            header.style.userSelect = 'none'; // Prevent text selection
+
+            header.addEventListener('click', () => {
+                // Toggle Class
+                list.classList.toggle('hidden');
+
+                // Rotate Icon
+                if (list.classList.contains('hidden')) {
+                    toggleIcon.style.transform = 'rotate(180deg)';
+                } else {
+                    toggleIcon.style.transform = 'rotate(0deg)';
+                }
+            });
+        }
+    });
 });

@@ -101,83 +101,142 @@
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <h3 style="margin-bottom: 1rem; font-family: var(--font-heading);">Quản Lý</h3>
-            <a href="#" class="admin-menu-item active"><i class="fas fa-box"></i> Sản Phẩm</a>
-            <a href="#" class="admin-menu-item"><i class="fas fa-newspaper"></i> Tin Tức (Coming Soon)</a>
+            <a href="#" class="admin-menu-item active" onclick="switchTab('product')"><i class="fas fa-box"></i> Sản
+                Phẩm</a>
+            <a href="#" class="admin-menu-item" onclick="switchTab('news')"><i class="fas fa-newspaper"></i> Tin Tức</a>
             <a href="#" class="admin-menu-item"><i class="fas fa-cog"></i> Cấu Hình</a>
         </aside>
 
         <!-- Main Content -->
         <main class="admin-content">
-            <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Quản Lý Sản Phẩm</h2>
 
-            <!-- Add New Product Component -->
-            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h4 style="margin-bottom: 1rem;">Thêm Sản Phẩm Mới</h4>
-                <form id="addProductForm">
-                    <div class="form-group">
-                        <label class="form-label">Tên Sản Phẩm</label>
-                        <input type="text" class="form-control" id="productName" placeholder="Ví dụ: Cây Kim Tiền"
-                            required>
-                    </div>
+            <!-- PRODUCT SECTION -->
+            <div id="productSection">
+                <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Quản Lý Sản Phẩm</h2>
 
-                    <div class="form-group">
-                        <label class="form-label">Mô Tả Chi Tiết (Bài Viết)</label>
-                        <textarea class="form-control" id="productDescription" rows="5"
-                            placeholder="Viết bài giới thiệu chi tiết về sản phẩm..."></textarea>
-                    </div>
+                <!-- Add/Edit Product Component -->
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h4 style="margin-bottom: 1rem;" id="formTitle">Thêm Sản Phẩm Mới</h4>
+                    <form id="addProductForm">
+                        <input type="hidden" id="editProductId"> <!-- Hidden ID for Edit Mode -->
 
-                    <div class="form-group">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label class="form-label">Giá (VND)</label>
-                                <input type="text" class="form-control" id="productPrice" placeholder="Ví dụ: 150.000₫"
-                                    required>
-                            </div>
-                            <div>
-                                <label class="form-label">Danh Mục</label>
-                                <select class="form-control" id="productCategory">
-                                    <option value="" disabled selected>-- Chọn danh mục --</option>
-                                    <optgroup label="Danh Mục Cửa Hàng">
-                                        <option value="cay-trong-nha">Cây trồng trong nhà</option>
-                                        <option value="cay-san-vuon">Cây trồng sân vườn</option>
-                                        <option value="cay-cong-trinh">Cây công trình</option>
-                                        <option value="cay-an-trai">Cây trồng ăn trái</option>
-                                    </optgroup>
-                                    <optgroup label="Danh Mục Sản Phẩm (Menu Đỏ)">
-                                        <option value="cay-xanh">Sản Phẩm Cây Xanh</option>
-                                        <option value="ban-cong">Sản Phẩm Cây Ban Công</option>
-                                        <option value="chau-xi-mang">Chậu Xi Măng Đá Mài</option>
-                                        <option value="chau-composite">Chậu Composite</option>
-                                        <option value="gia-the">Giá Thể Trồng Cây</option>
-                                    </optgroup>
-                                </select>
+                        <div class="form-group">
+                            <label class="form-label">Tên Sản Phẩm</label>
+                            <input type="text" class="form-control" id="productName" placeholder="Ví dụ: Cây Kim Tiền"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mô Tả Chi Tiết (Bài Viết)</label>
+                            <textarea class="form-control" id="productDescription" rows="5"
+                                placeholder="Viết bài giới thiệu chi tiết về sản phẩm..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <label class="form-label">Giá (VND)</label>
+                                    <input type="text" class="form-control" id="productPrice"
+                                        placeholder="Ví dụ: 150.000₫" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">Danh Mục</label>
+                                    <select class="form-control" id="productCategory">
+                                        <option value="" disabled selected>-- Chọn danh mục --</option>
+                                        <optgroup label="Danh Mục Cửa Hàng">
+                                            <option value="cay-trong-nha">Cây trồng trong nhà</option>
+                                            <option value="cay-san-vuon">Cây trồng sân vườn</option>
+                                            <option value="cay-cong-trinh">Cây công trình</option>
+                                            <option value="cay-an-trai">Cây trồng ăn trái</option>
+                                        </optgroup>
+                                        <optgroup label="Danh Mục Sản Phẩm (Menu Đỏ)">
+                                            <option value="cay-xanh">Sản Phẩm Cây Xanh</option>
+                                            <option value="ban-cong">Sản Phẩm Cây Ban Công</option>
+                                            <option value="chau-xi-mang">Chậu Xi Măng Đá Mài</option>
+                                            <option value="chau-composite">Chậu Composite</option>
+                                            <option value="gia-the">Giá Thể Trồng Cây</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Hình Ảnh</label>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="file" class="form-control" id="productImageFile" accept="image/*">
-                            <span style="font-size: 0.9rem; color: #666;">Hoặc</span>
-                            <input type="url" class="form-control" id="productImage"
-                                placeholder="Dán link ảnh (nếu không up file)">
+                        <div class="form-group">
+                            <label class="form-label">Hình Ảnh</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="file" class="form-control" id="productImageFile" accept="image/*">
+                                <span style="font-size: 0.9rem; color: #666;">Hoặc</span>
+                                <input type="url" class="form-control" id="productImage"
+                                    placeholder="Dán link ảnh (nếu không up file)">
+                            </div>
+                            <small style="color: #666;">Chọn ảnh từ máy tính (Khuyên dùng) hoặc dán link ảnh.</small>
                         </div>
-                        <small style="color: #666;">Chọn ảnh từ máy tính (Khuyên dùng) hoặc dán link ảnh.</small>
+
+                        <button type="submit" class="btn btn-primary" id="submitProductBtn">Lưu Sản Phẩm</button>
+                        <button type="button" class="btn btn-sm" id="cancelEditBtn"
+                            style="display: none; background: #999; color: white; margin-left: 10px;">Hủy Sửa</button>
+                    </form>
+                </div>
+
+                <!-- List Products -->
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Danh Sách Sản Phẩm Hiện Có</h4>
+                    <div id="adminProductList">
+                        <p style="text-align: center; color: #999; padding: 2rem;">Đang tải dữ liệu...</p>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
-                </form>
-            </div>
-
-            <!-- List Products -->
-            <div>
-                <h4 style="margin-bottom: 1rem;">Danh Sách Sản Phẩm Hiện Có</h4>
-                <div id="adminProductList">
-                    <p style="text-align: center; color: #999; padding: 2rem;">Đang tải dữ liệu...</p>
-                    <!-- JavaScript will populate this -->
                 </div>
             </div>
+
+            <!-- NEWS SECTION (Initially Hidden) -->
+            <div id="newsSection" style="display: none;">
+                <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Quản Lý Tin Tức</h2>
+
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h4 style="margin-bottom: 1rem;" id="newsFormTitle">Thêm Tin Tức Mới</h4>
+                    <form id="addNewsForm">
+                        <input type="hidden" id="editNewsId">
+
+                        <div class="form-group">
+                            <label class="form-label">Tiêu Đề Bài Viết</label>
+                            <input type="text" class="form-control" id="newsTitle"
+                                placeholder="Ví dụ: Cách chăm sóc cây Kim Tiền" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tóm Tắt Ngắn</label>
+                            <textarea class="form-control" id="newsExcerpt" rows="3"
+                                placeholder="Đoạn mô tả ngắn hiện bên ngoài danh sách..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Nội Dung Chi Tiết</label>
+                            <textarea class="form-control" id="newsContent" rows="10"
+                                placeholder="Nội dung bài viết... (Có thể dùng thẻ HTML cơ bản)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Hình Ảnh Bìa</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="file" class="form-control" id="newsImageFile" accept="image/*">
+                                <span style="font-size: 0.9rem; color: #666;">Hoặc</span>
+                                <input type="url" class="form-control" id="newsImage" placeholder="Dán link ảnh bìa">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submitNewsBtn">Đăng Bài</button>
+                        <button type="button" class="btn btn-sm" id="cancelNewsEditBtn"
+                            style="display: none; background: #999; color: white; margin-left: 10px;">Hủy Sửa</button>
+                    </form>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Danh Sách Bài Viết</h4>
+                    <div id="adminNewsList">
+                        <p style="text-align: center; color: #999; padding: 2rem;">Đang tải dữ liệu...</p>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
