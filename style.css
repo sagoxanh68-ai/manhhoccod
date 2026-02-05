@@ -326,53 +326,96 @@ img {
 
 /* Hero */
 .hero {
-  height: 80vh;
-  min-height: 600px;
+  height: 85vh;
+  /* Slightly taller */
+  min-height: 650px;
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
+  /* Parallax effect for professionalism */
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  /* Center horizontally */
 }
 
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  /* Lighter overlay */
+  background: rgba(0, 0, 0, 0.4);
+  /* Slightly darker for better text contrast */
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
   color: white;
-  max-width: 800px;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.4);
-  /* Make text readable */
+  max-width: 900px;
+  /* Wider */
+  padding: 3rem 2rem;
+  /* More padding */
+  background: rgba(0, 0, 0, 0.5);
+  /* Darker semi-transparent box */
   border-radius: var(--radius-md);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  /* stronger blur */
+  text-align: center;
+  /* Center text */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Subtle border */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  /* Lift up effect */
 }
 
 .hero-subtitle {
   color: var(--secondary-color);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 3.5rem;
+  /* Larger title */
   color: white;
-  margin-bottom: 1rem;
-  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
+  line-height: 1.2;
 }
 
 .hero-desc {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  line-height: 1.8;
+}
+
+/* Page Hero (Subpages) */
+.page-hero {
+  height: 45vh;
+  min-height: 350px;
+  background-color: var(--primary-dark);
+  /* Fallback Color */
+  background-size: cover;
+  background-position: center;
+  /* background-attachment: fixed; */
+  /* Disable parallax to ensure image visibility on all devices for now */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 /* Sections */

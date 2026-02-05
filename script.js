@@ -1,6 +1,26 @@
 /* script.js */
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Search Functionality (Priority) ---
+    console.log("Script.js loaded. Attaching search listeners...");
+    const searchForms = document.querySelectorAll('.search-form');
+    if (searchForms.length === 0) console.warn("No search forms found!");
+
+    searchForms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // STOP page reload
+            console.log("Search form submitted");
+            const input = form.querySelector('.search-input');
+            const query = input.value.trim();
+
+            if (query) {
+                console.log("Redirecting to shop with:", query);
+                // Redirect to shop page with query parameter
+                window.location.href = `cua-hang.html?q=${encodeURIComponent(query)}`;
+            }
+        });
+    });
+
     // Header Scroll Effect
     const header = document.querySelector('.header');
 

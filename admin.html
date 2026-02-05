@@ -103,8 +103,10 @@
             <h3 style="margin-bottom: 1rem; font-family: var(--font-heading);">Quản Lý</h3>
             <a href="#" class="admin-menu-item active" onclick="switchTab('product')"><i class="fas fa-box"></i> Sản
                 Phẩm</a>
+            <a href="#" class="admin-menu-item" onclick="switchTab('services')"><i class="fas fa-concierge-bell"></i>
+                Dịch Vụ</a>
             <a href="#" class="admin-menu-item" onclick="switchTab('news')"><i class="fas fa-newspaper"></i> Tin Tức</a>
-            <a href="#" class="admin-menu-item"><i class="fas fa-cog"></i> Cấu Hình</a>
+            <a href="#" class="admin-menu-item" onclick="switchTab('config')"><i class="fas fa-cog"></i> Cấu Hình</a>
         </aside>
 
         <!-- Main Content -->
@@ -130,6 +132,27 @@
                             <label class="form-label">Mô Tả Chi Tiết (Bài Viết)</label>
                             <textarea class="form-control" id="productDescription" rows="5"
                                 placeholder="Viết bài giới thiệu chi tiết về sản phẩm..."></textarea>
+
+                            <!-- Inline Image Helper for Product -->
+                            <div
+                                style="margin-top: 10px; padding: 10px; background: #e8f5e9; border-radius: 4px; border: 1px dashed #2e7d32;">
+                                <label
+                                    style="font-size: 0.9em; font-weight: bold; color: #2e7d32; display: block; margin-bottom: 5px;">
+                                    <i class="fas fa-camera"></i> Chèn ảnh minh họa vào bài viết:
+                                </label>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <input type="file" id="productContentImageFile" accept="image/*"
+                                        style="font-size: 0.9em; width: auto;">
+                                    <button type="button" class="btn btn-sm" id="btnInsertProductImg"
+                                        style="background: #2e7d32; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                                        <i class="fas fa-plus-circle"></i> Chèn Ảnh
+                                    </button>
+                                </div>
+                                <small style="color: #555; display: block; margin-top: 5px;">
+                                    *Hướng dẫn: Đặt con trỏ chuột vào nơi muốn chèn trong ô soạn thảo, chọn ảnh, rồi
+                                    nhấn nút "Chèn Ảnh".
+                                </small>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -187,6 +210,63 @@
                 </div>
             </div>
 
+            <!-- SERVICES TAB -->
+            <div id="servicesSection" style="display: none;">
+                <div class="content-header">
+                    <h2 class="section-title">Quản Lý Dịch Vụ</h2>
+                    <button class="btn btn-primary" onclick="showAddServiceForm()">+ Thêm Dịch Vụ Mới</button>
+                </div>
+
+                <div id="serviceList" class="product-list">
+                    <!-- Services will be loaded here -->
+                    <p>Đang tải danh sách dịch vụ...</p>
+                </div>
+
+                <!-- Add/Edit Service Modal/Form (Inline for simplicity) -->
+                <div id="serviceFormSection"
+                    style="display: none; background: #f9f9f9; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <h3 id="serviceFormTitle" style="margin-bottom: 1rem;">Thêm Dịch Vụ Mới</h3>
+                    <form id="serviceForm">
+                        <input type="hidden" id="editServiceId">
+
+                        <div class="form-group">
+                            <label class="form-label">Tên Dịch Vụ</label>
+                            <input type="text" class="form-control" id="serviceTitle" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mô Tả Ngắn (Excerpt)</label>
+                            <textarea class="form-control" id="serviceExcerpt" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Nội Dung Chi Tiết</label>
+                            <textarea class="form-control" id="serviceContent" rows="10"></textarea>
+                            <div style="margin-top: 10px;">
+                                <input type="file" id="serviceContentImageFile" accept="image/*" style="display: none;">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    onclick="document.getElementById('serviceContentImageFile').click()">Chọn ảnh chèn
+                                    vào bài</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="btnInsertServiceImg">Chèn ảnh
+                                    vào bài viết</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Hình Ảnh Đại Diện</label>
+                            <input type="file" class="form-control" id="serviceImageFile" accept="image/*">
+                            <input type="hidden" id="serviceImageUrl">
+                        </div>
+
+                        <div style="text-align: right;">
+                            <button type="button" class="btn btn-secondary" onclick="hideServiceForm()"
+                                id="cancelServiceEditBtn" style="margin-right: 10px;">Hủy</button>
+                            <button type="submit" class="btn btn-primary" id="submitServiceBtn">Lưu Dịch Vụ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- NEWS SECTION (Initially Hidden) -->
             <div id="newsSection" style="display: none;">
                 <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Quản Lý Tin Tức</h2>
@@ -212,6 +292,23 @@
                             <label class="form-label">Nội Dung Chi Tiết</label>
                             <textarea class="form-control" id="newsContent" rows="10"
                                 placeholder="Nội dung bài viết... (Có thể dùng thẻ HTML cơ bản)"></textarea>
+
+                            <!-- Inline Image Helper for News -->
+                            <div
+                                style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 4px; border: 1px dashed #aaa;">
+                                <label style="font-size: 0.9em; font-weight: bold; color: #1565c0;">Chèn ảnh vào bài
+                                    viết:</label>
+                                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                                    <input type="file" id="newsContentImageFile" accept="image/*"
+                                        style="font-size: 0.9em;">
+                                    <button type="button" class="btn btn-sm" id="btnInsertNewsImg"
+                                        style="background: #1565c0; color: white;">
+                                        <i class="fas fa-image"></i> Chèn ngay
+                                    </button>
+                                </div>
+                                <small style="color: #666;">Chọn ảnh rồi bấm "Chèn ngay" để thêm ảnh vào vị trí con
+                                    trỏ.</small>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -234,6 +331,167 @@
                     <div id="adminNewsList">
                         <p style="text-align: center; color: #999; padding: 2rem;">Đang tải dữ liệu...</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- CONFIG SECTION -->
+            <div id="configSection" style="display: none;">
+                <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Cấu Hình Website</h2>
+
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                    <form id="configForm">
+                        <h4 style="margin-bottom: 1rem; color: var(--primary-color);">Cài Đặt Chung</h4>
+
+                        <!-- Logo -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">Logo Website</label>
+                            <input type="file" class="form-control" id="logoFile" accept="image/*">
+                            <input type="hidden" id="logoUrl">
+                            <div class="banner-preview-box"
+                                style="height: 80px; width: 200px; background: transparent; border: 1px dashed #ccc;">
+                                <img id="logoPreview" src="" style="max-height:100%; max-width:100%; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có logo</span>
+                            </div>
+                            <small class="text-muted">Nếu tải logo lên, biểu tượng lá cây và tên mặc định sẽ được thay
+                                thế.</small>
+                        </div>
+
+                        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+
+                        <!-- Hero Banner -->
+                        <h4 style="margin-bottom: 1rem; color: var(--primary-color);">Cài Đặt Hình Ảnh Banner (Hero)
+                        </h4>
+
+                        <!-- Helper CSS for banner inputs -->
+                        <style>
+                            .banner-input-group {
+                                margin-bottom: 1.5rem;
+                                border: 1px solid #eee;
+                                padding: 15px;
+                                border-radius: 8px;
+                                background: white;
+                            }
+
+                            .banner-label {
+                                font-weight: 600;
+                                display: block;
+                                margin-bottom: 5px;
+                                color: #2e7d32;
+                            }
+
+                            .banner-preview-box {
+                                width: 100%;
+                                height: 100px;
+                                background: #eee;
+                                border-radius: 4px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-top: 10px;
+                            }
+                        </style>
+
+                        <!-- 1. HOME -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">1. Trang Chủ (Index)</label>
+                            <input type="file" class="form-control" id="heroImageFile_home" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_home">
+                            <div class="banner-preview-box">
+                                <img id="preview_home" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <!-- 2. ABOUT -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">2. Giới Thiệu (About)</label>
+                            <input type="file" class="form-control" id="heroImageFile_about" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_about">
+                            <div class="banner-preview-box">
+                                <img id="preview_about" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <!-- 3. SERVICES -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">3. Dịch Vụ (Services - Chung)</label>
+                            <input type="file" class="form-control" id="heroImageFile_services" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_services">
+                            <div class="banner-preview-box">
+                                <img id="preview_services" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <!-- 4. SHOP -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">4. Cửa Hàng (Shop)</label>
+                            <input type="file" class="form-control" id="heroImageFile_shop" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_shop">
+                            <div class="banner-preview-box">
+                                <img id="preview_shop" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <!-- 5. NEWS -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">5. Tin Tức (News)</label>
+                            <input type="file" class="form-control" id="heroImageFile_news" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_news">
+                            <div class="banner-preview-box">
+                                <img id="preview_news" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <!-- 6. CONTACT -->
+                        <div class="banner-input-group">
+                            <label class="banner-label">6. Liên Hệ (Contact)</label>
+                            <input type="file" class="form-control" id="heroImageFile_contact" accept="image/*">
+                            <input type="hidden" id="heroImageUrl_contact">
+                            <div class="banner-preview-box">
+                                <img id="preview_contact" src=""
+                                    style="width:100%; height:100%; object-fit:cover; display:none;">
+                                <span class="placeholder-text" style="font-size:0.8rem; color:#666;">Chưa có ảnh</span>
+                            </div>
+                        </div>
+
+                        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+
+                        <h4 style="margin-bottom: 1rem; color: var(--primary-color);">Thông Tin Liên Hệ</h4>
+
+                        <div class="form-group">
+                            <label class="form-label">Số Điện Thoại Hotline</label>
+                            <input type="text" class="form-control" id="contactPhone" placeholder="Ví dụ: 079.388.9518">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Liên Hệ</label>
+                            <input type="email" class="form-control" id="contactEmail"
+                                placeholder="Ví dụ: sagoxanh68@gmail.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Địa Chỉ</label>
+                            <input type="text" class="form-control" id="contactAddress"
+                                placeholder="Ví dụ: 86 TCH 36, P.Trung Mỹ Tây, Q.12">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Zalo Link</label>
+                            <input type="text" class="form-control" id="zaloLink" placeholder="https://zalo.me/...">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="saveConfigBtn">Lưu Cấu Hình</button>
+                    </form>
                 </div>
             </div>
 

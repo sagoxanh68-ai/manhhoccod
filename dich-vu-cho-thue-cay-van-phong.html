@@ -19,7 +19,8 @@
                 <div class="header-top-left">
                     <span><i class="fas fa-map-marker-alt"></i> 86 TCH 36, P.Trung Mỹ Tây, Q.12, TP.HCM</span>
                     <span><i class="fas fa-envelope"></i> sagoxanh68@gmail.com</span>
-                    <span><i class="fas fa-phone"></i> 079.388.9518</span>
+                    <span><i class="fas fa-phone"></i> <a href="tel:0793889518"
+                            style="color: inherit; text-decoration: none;">079.388.9518</a></span>
                 </div>
                 <div class="header-top-right">Kiến tạo không gian xanh - Nâng tầm cuộc sống!</div>
             </div>
@@ -34,7 +35,8 @@
                     </div>
                 </div>
                 <div class="header-contact">
-                    <span class="header-contact-label">Hotline: 079.388.9518</span>
+                    <span class="header-contact-label">Hotline: <a href="tel:0793889518"
+                            style="color: inherit; text-decoration: none;">079.388.9518</a></span>
                 </div>
                 <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
             </div>
@@ -43,7 +45,7 @@
             <div class="container">
                 <nav class="nav-links">
                     <div class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link" style="color: #d32f2f; font-weight: 800;">DANH MỤC
+                        <a href="javascript:void(0)" class="nav-link special-menu">DANH MỤC
                             SẢN PHẨM <i class="fas fa-angle-down"></i></a>
                         <div class="dropdown-content">
                             <a href="cua-hang.html#cay-xanh">Sản Phẩm Cây Xanh (Nội Thất)</a>
@@ -80,15 +82,16 @@
         </div>
     </header>
 
-    <!-- Header Banner -->
-    <header class="blog-header"
-        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop') center/cover;">
-        <div class="container">
-            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Dịch Vụ Cho Thuê Cây Xanh Văn Phòng</h1>
-            <p style="font-size: 1.3rem; opacity: 0.9;">Giải pháp xanh tiết kiệm - Văn phòng hiện đại - Nâng cao hiệu
-                suất</p>
+    <!-- Page Hero -->
+    <section class="page-hero"
+        style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop');">
+        <div class="hero-content">
+            <h4 class="hero-subtitle">Giải Pháp Xanh Doanh Nghiệp</h4>
+            <h1 class="hero-title">Cho Thuê Cây Văn Phòng</h1>
+            <p style="color: #eee; font-size: 1.1rem;">Tiết kiệm chi phí - Nâng tầm không gian làm việc chuyên nghiệp
+            </p>
         </div>
-    </header>
+    </section>
 
     <!-- Main Content -->
     <div class="blog-wrapper">
@@ -152,8 +155,7 @@
                 <li><strong>Tạo vách ngăn tự nhiên:</strong> Sử dụng cây xanh để phân chia không gian làm việc thay vì
                     những vách kính hay tường thạch cao khô cứng.</li>
             </ul>
-            <img src="https://images.unsplash.com/photo-1497215842964-222b4bef9720?q=80&w=2070&auto=format&fit=crop"
-                alt="Cây xanh văn phòng đẹp">
+            <img src="images/service-office.png" alt="Cây xanh văn phòng đẹp">
 
             <h2 id="goi-dich-vu">3. Gói Dịch Vụ Của Sago Xanh Bao Gồm Những Gì?</h2>
             <p>Khi ký hợp đồng thuê cây, quý doanh nghiệp sẽ được hưởng trọn gói các tiện ích:</p>
@@ -256,7 +258,8 @@
                     <h4 class="footer-heading">Liên Hệ</h4>
                     <ul class="footer-links" style="opacity: 0.9;">
                         <li><i class="fas fa-map-marker-alt"></i> 86 TCH 36, P. Trung Mỹ Tây, Q.12, TP.HCM</li>
-                        <li><i class="fas fa-phone"></i> 079.388.9518</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:0793889518"
+                                style="color: inherit; text-decoration: none;">079.388.9518</a></li>
                         <li><i class="fas fa-envelope"></i> sagoxanh68@gmail.com</li>
                     </ul>
                 </div>
@@ -279,6 +282,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="config-loader.js"></script>
     <script src="script.js"></script>
     <script src="comment-system.js"></script>
     <script>

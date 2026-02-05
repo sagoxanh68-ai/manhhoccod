@@ -1,29 +1,58 @@
-// admin.js - Pro CMS Logic
-
 // --- TABS & UI LOGIC ---
-function switchTab(tabName) {
-    const productSection = document.getElementById('productSection');
-    const newsSection = document.getElementById('newsSection');
-    const menuItems = document.querySelectorAll('.admin-menu-item');
+const menuItems = document.querySelectorAll('.admin-menu-item');
+const productSection = document.getElementById('productSection');
+const newsSection = document.getElementById('newsSection');
+const serviceSection = document.getElementById('servicesSection');
+// Config section ID is not robustly defined in HTML, handled dynamically or needs ID. 
+// Assuming configSection variable is not strictly needed globally if we find it dynamically, 
+// OR we should fix HTML to have an ID. For now, let's keep it safe.
 
+// Helper to reset all views
+function resetTabs() {
+    productSection.style.display = 'none';
+    newsSection.style.display = 'none';
+    serviceSection.style.display = 'none';
+    document.getElementById('configForm').parentElement.style.display = 'none'; // Config is wrapped in a div in the snippet I saw, let's check. 
+    // Actually, looking at previous admin.html code:
+    // Config was just a form inside a div, but didn't have a wrapper ID 'configSection' in the snippet I saw earlier? 
+    // Wait, let's check admin.html for config wrapper.
     menuItems.forEach(item => item.classList.remove('active'));
+}
 
+function switchTab(tabName) {
+    // 1. Reset All
+    productSection.style.display = 'none';
+    if (newsSection) newsSection.style.display = 'none';
+    if (serviceSection) serviceSection.style.display = 'none';
+    if (document.getElementById('configForm')) document.getElementById('configForm').parentElement.style.display = 'none';
+
+    menuItems.forEach(i => i.classList.remove('active'));
+
+    // 2. Activate Target
     if (tabName === 'product') {
         productSection.style.display = 'block';
-        newsSection.style.display = 'none';
         menuItems[0].classList.add('active');
-        loadProducts(); // Refresh
-    } else {
-        productSection.style.display = 'none';
-        newsSection.style.display = 'block';
+        loadProducts();
+    } else if (tabName === 'services' || tabName === 'service') {
+        serviceSection.style.display = 'block';
         menuItems[1].classList.add('active');
-        loadNews(); // Refresh
+        loadServices();
+    } else if (tabName === 'news') {
+        newsSection.style.display = 'block';
+        menuItems[2].classList.add('active');
+        loadNews();
+    } else if (tabName === 'config') {
+        const configContainer = document.getElementById('configSection'); // Use correct ID
+        if (configContainer) configContainer.style.display = 'block';
+        menuItems[3].classList.add('active');
+        loadConfig();
     }
 }
 
 // Initial Load
 document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
+    // Set initial tab to 'product' or the first one
+    switchTab('product');
 });
 
 
@@ -333,4 +362,333 @@ function deleteNews(id) {
     if (confirm('Xóa bài viết này?')) {
         db.collection('news').doc(id).delete().then(loadNews);
     }
+}
+
+// --- 3. HELPER: INLINE IMAGE INSERTION ---
+async function insertContentImage(fileInputId, textareaId, btnId) {
+    const fileInput = document.getElementById(fileInputId);
+    const textarea = document.getElementById(textareaId);
+    const btn = document.getElementById(btnId);
+    const originalText = btn.innerHTML;
+
+    if (!fileInput.files[0]) {
+        alert("Vui lòng chọn ảnh cần chèn!");
+        return;
+    }
+
+    try {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải lên...';
+
+        const file = fileInput.files[0];
+        const ref = storage.ref(`content_images/${Date.now()}_${file.name}`);
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+
+        // Insert into textarea
+        const imgTag = `\n<img src="${url}" alt="Ảnh minh họa" style="width: 100%; height: auto; border-radius: 8px; margin: 10px 0;">\n`;
+
+        if (textarea.selectionStart || textarea.selectionStart == '0') {
+            const startPos = textarea.selectionStart;
+            const endPos = textarea.selectionEnd;
+            textarea.value = textarea.value.substring(0, startPos)
+                + imgTag
+                + textarea.value.substring(endPos, textarea.value.length);
+        } else {
+            textarea.value += imgTag;
+        }
+
+        alert("Đã chèn ảnh thành công!");
+        fileInput.value = '';
+
+    } catch (error) {
+        console.error("Insert img error:", error);
+        alert("Lỗi tải ảnh: " + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+// Event Listeners for Insert Buttons
+document.getElementById('btnInsertProductImg').addEventListener('click', () => {
+    insertContentImage('productContentImageFile', 'productDescription', 'btnInsertProductImg');
+});
+
+document.getElementById('btnInsertNewsImg').addEventListener('click', () => {
+    insertContentImage('newsContentImageFile', 'newsContent', 'btnInsertNewsImg');
+});
+
+// --- 3. CONFIGURATION MANAGEMENT ---
+const configForm = document.getElementById('configForm');
+const bannerKeys = ['home', 'about', 'services', 'shop', 'news', 'contact'];
+
+// Function to setup preview listeners
+function setupBannerPreviews() {
+    bannerKeys.forEach(key => {
+        const fileInput = document.getElementById(`heroImageFile_${key}`);
+        const imgPreview = document.getElementById(`preview_${key}`);
+        const placeholder = imgPreview.nextElementSibling;
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (evt) {
+                        imgPreview.src = evt.target.result;
+                        imgPreview.style.display = 'block';
+                        if (placeholder) placeholder.style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+}
+setupBannerPreviews();
+
+// Load Config
+function loadConfig() {
+    db.collection('settings').doc('general').get().then(doc => {
+        if (doc.exists) {
+            const data = doc.data();
+
+            // Populate Banners
+            bannerKeys.forEach(key => {
+                const url = data[`heroImage_${key}`] || '';
+                document.getElementById(`heroImageUrl_${key}`).value = url;
+                if (url) {
+                    const img = document.getElementById(`preview_${key}`);
+                    img.src = url;
+                    img.style.display = 'block';
+                    if (img.nextElementSibling) img.nextElementSibling.style.display = 'none';
+                }
+            });
+
+            if (data.contactPhone) document.getElementById('contactPhone').value = data.contactPhone;
+            if (data.contactEmail) document.getElementById('contactEmail').value = data.contactEmail;
+            if (data.contactAddress) document.getElementById('contactAddress').value = data.contactAddress;
+            if (data.zaloLink) document.getElementById('zaloLink').value = data.zaloLink;
+
+            // Logo
+            if (data.logo) {
+                document.getElementById('logoUrl').value = data.logo;
+                document.getElementById('logoPreview').src = data.logo;
+                document.getElementById('logoPreview').style.display = 'block';
+                document.getElementById('logoPreview').nextElementSibling.style.display = 'none';
+            }
+        }
+    }).catch(err => console.error("Error loading config:", err));
+}
+
+// Logo Preview
+document.getElementById('logoFile').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('logoPreview').src = e.target.result;
+            document.getElementById('logoPreview').style.display = 'block';
+            document.getElementById('logoPreview').nextElementSibling.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Save Config
+configForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('saveConfigBtn');
+    const originalText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = "Đang lưu...";
+
+    try {
+        const configData = {
+            contactPhone: document.getElementById('contactPhone').value,
+            contactEmail: document.getElementById('contactEmail').value,
+            contactAddress: document.getElementById('contactAddress').value,
+            zaloLink: document.getElementById('zaloLink').value,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        // Handle Logo
+        const logoFile = document.getElementById('logoFile').files[0];
+        let logoUrl = document.getElementById('logoUrl').value;
+        if (logoFile) {
+            btn.innerText = "Đang tải Logo...";
+            logoUrl = await handleImageUpload(logoFile, logoUrl, null);
+        }
+        configData.logo = logoUrl;
+
+        // Handle Banners Upload Sequentially
+        for (const key of bannerKeys) {
+            const fileInput = document.getElementById(`heroImageFile_${key}`);
+            const urlInput = document.getElementById(`heroImageUrl_${key}`);
+
+            let finalUrl = urlInput.value;
+
+            if (fileInput.files.length > 0) {
+                // Update button text to show progress
+                btn.innerText = `Đang tải ảnh ${key}...`;
+                finalUrl = await handleImageUpload(fileInput.files[0], finalUrl, null);
+            }
+
+            configData[`heroImage_${key}`] = finalUrl;
+        }
+
+        // Use set with merge: true to create if not exists
+        await db.collection('settings').doc('general').set(configData, { merge: true });
+
+        alert("Lưu cấu hình thành công! Hãy tải lại trang chủ để thấy thay đổi.");
+        loadConfig();
+
+    } catch (error) {
+        alert("Lỗi: " + error.message);
+        console.error(error);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
+});
+
+// --- 4. SERVICE MANAGEMENT ---
+const serviceList = document.getElementById('serviceList');
+const serviceFormSection = document.getElementById('serviceFormSection');
+const serviceForm = document.getElementById('serviceForm');
+const serviceFormTitle = document.getElementById('serviceFormTitle');
+const submitServiceBtn = document.getElementById('submitServiceBtn');
+const cancelServiceEditBtn = document.getElementById('cancelServiceEditBtn');
+
+function showAddServiceForm() {
+    serviceForm.reset();
+    document.getElementById('editServiceId').value = '';
+    document.getElementById('serviceImageUrl').value = '';
+    serviceFormSection.style.display = 'block';
+    serviceFormTitle.innerText = 'Thêm Dịch Vụ Mới';
+    submitServiceBtn.innerText = 'Lưu Dịch Vụ';
+    cancelServiceEditBtn.style.display = 'inline-block';
+    serviceFormSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideServiceForm() {
+    serviceFormSection.style.display = 'none';
+    serviceForm.reset();
+}
+
+serviceForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editServiceId').value;
+    const title = document.getElementById('serviceTitle').value;
+    const excerpt = document.getElementById('serviceExcerpt').value;
+    const content = document.getElementById('serviceContent').value;
+    const file = document.getElementById('serviceImageFile').files[0];
+    let imageUrl = document.getElementById('serviceImageUrl').value;
+    const originalBtnText = submitServiceBtn.innerText;
+
+    if (!title) {
+        alert("Vui lòng nhập tên dịch vụ");
+        return;
+    }
+
+    try {
+        submitServiceBtn.disabled = true;
+        submitServiceBtn.innerText = "Đang xử lý...";
+
+        if (file) {
+            imageUrl = await handleImageUpload(file, imageUrl, submitServiceBtn);
+        }
+
+        const serviceData = {
+            title,
+            excerpt,
+            content,
+            image: imageUrl,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        if (id) {
+            await db.collection('services').doc(id).update(serviceData);
+            alert("Cập nhật dịch vụ thành công!");
+        } else {
+            serviceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection('services').add(serviceData);
+            alert("Thêm dịch vụ mới thành công!");
+        }
+
+        hideServiceForm();
+        loadServices();
+
+    } catch (error) {
+        console.error("Error saving service:", error);
+        alert("Lỗi: " + error.message);
+    } finally {
+        submitServiceBtn.disabled = false;
+        submitServiceBtn.innerText = originalBtnText;
+    }
+});
+
+function loadServices() {
+    if (!serviceList) return; // Guard clause
+    serviceList.innerHTML = '<p>Đang tải...</p>';
+    db.collection('services').orderBy('createdAt', 'desc').get().then(snap => {
+        if (snap.empty) {
+            serviceList.innerHTML = '<p>Chưa có dịch vụ nào.</p>';
+            return;
+        }
+
+        let html = '';
+        snap.forEach(doc => {
+            const s = doc.data();
+            const dataSafe = encodeURIComponent(JSON.stringify({ ...s, id: doc.id }));
+
+            html += `
+                <div class="product-list-item">
+                    <img src="${s.image || 'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
+                    <div style="flex:1">
+                        <h4>${s.title}</h4>
+                        <p style="font-size:0.8rem; color:#666; margin:0">${s.excerpt || ''}</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="editService('${dataSafe}')">Sửa</button>
+                        <button class="btn btn-sm" style="background:#ff4444; color:white; margin-left:5px" onclick="deleteService('${doc.id}')">Xóa</button>
+                    </div>
+                </div>
+            `;
+        });
+        serviceList.innerHTML = html;
+    }).catch(err => {
+        console.error("Error loading services:", err);
+        serviceList.innerHTML = '<p>Lỗi tải danh sách.</p>';
+    });
+}
+
+function editService(encodedData) {
+    const s = JSON.parse(decodeURIComponent(encodedData));
+
+    document.getElementById('editServiceId').value = s.id;
+    document.getElementById('serviceTitle').value = s.title;
+    document.getElementById('serviceExcerpt').value = s.excerpt;
+    document.getElementById('serviceContent').value = s.content;
+    document.getElementById('serviceImageUrl').value = s.image || '';
+
+    showAddServiceForm(); // Show form
+
+    document.getElementById('serviceFormTitle').innerText = 'Sửa Dịch Vụ';
+    document.getElementById('submitServiceBtn').innerText = 'Cập Nhật';
+}
+
+function deleteService(id) {
+    if (confirm('Xóa dịch vụ này? Hành động này không thể hoàn tác.')) {
+        db.collection('services').doc(id).delete().then(loadServices);
+    }
+}
+
+// Add event listener for service image insert
+const btnInsertServiceImg = document.getElementById('btnInsertServiceImg');
+if (btnInsertServiceImg) {
+    btnInsertServiceImg.addEventListener('click', () => {
+        insertContentImage('serviceContentImageFile', 'serviceContent', 'btnInsertServiceImg');
+    });
 }

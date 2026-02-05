@@ -40,9 +40,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Let's do simple formatting: Split by double newline -> paragraphs
         let contentHtml = news.content;
 
-        // Basic Auto-Format if not HTML
+        // Basic Auto-Format: Support Markdown headings and paragraphs
         if (!contentHtml.trim().startsWith('<')) {
-            contentHtml = contentHtml.split('\n').map(para => para.trim() ? `<p>${para}</p>` : '').join('');
+            contentHtml = contentHtml.split('\n').map(para => {
+                const trimmed = para.trim();
+                if (!trimmed) return '';
+
+                // Support Markdown Headings
+                if (trimmed.startsWith('## ')) return `<h2>${trimmed.substring(3)}</h2>`;
+                if (trimmed.startsWith('### ')) return `<h3>${trimmed.substring(4)}</h3>`;
+
+                // Default to paragraph
+                return `<p>${trimmed}</p>`;
+            }).join('');
         }
 
         const contentContainer = document.getElementById('newsContent');

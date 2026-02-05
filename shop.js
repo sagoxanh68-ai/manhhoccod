@@ -10,31 +10,51 @@ function formatPrice(price) {
     return num.toLocaleString('vi-VN') + 'đ';
 }
 
-function renderProducts(categoryFilter = null) {
+function renderProducts(filter = null, isSearch = false) {
     productGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1/-1;">Đang tải sản phẩm...</p>';
 
     let query = db.collection("products");
 
-    if (categoryFilter) {
-        // Note: Adding orderBy here requires a composite index in Firestore.
-        // To avoid errors for now, we won't sort by time when filtering.
-        // If you create an index, you can uncomment the next line:
-        // query = query.where("category", "==", categoryFilter).orderBy("createdAt", "desc");
-        query = query.where("category", "==", categoryFilter);
+    if (!isSearch && filter) {
+        // Category Filter
+        query = query.where("category", "==", filter);
     } else {
+        // Load all for search or no filter
         query = query.orderBy("createdAt", "desc");
     }
 
     query.get().then((querySnapshot) => {
+        console.log(`Loaded ${querySnapshot.size} products from DB.`);
         productGrid.innerHTML = ''; // Clear loading text
 
-        if (querySnapshot.empty) {
-            productGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1/-1;">Chưa có sản phẩm nào.</p>';
+        // Convert to array for filtering if needed
+        let products = [];
+        querySnapshot.forEach(doc => {
+            products.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Apply Search Filter (Client-side)
+        if (isSearch && filter) {
+            // Helper to remove accents for better search
+            const removeAccents = (str) => {
+                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            };
+
+            const searchKey = removeAccents(filter);
+
+            products = products.filter(p => {
+                if (!p.name) return false;
+                const productName = removeAccents(p.name);
+                return productName.includes(searchKey);
+            });
+        }
+
+        if (products.length === 0) {
+            productGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1/-1;">Không tìm thấy sản phẩm nào.</p>';
             return;
         }
 
-        querySnapshot.forEach((doc) => {
-            const product = doc.data();
+        products.forEach((product) => {
             // Fallback image if missing or error
             const imgUrl = product.image || 'https://via.placeholder.com/300?text=No+Image';
 
@@ -43,15 +63,15 @@ function renderProducts(categoryFilter = null) {
             // Click on card to go to detail
             productCard.innerHTML = `
                 <div class="product-img-wrapper">
-                    <a href="chi-tiet-san-pham.html?id=${doc.id}">
+                    <a href="chi-tiet-san-pham.html?id=${product.id}">
                         <img src="${imgUrl}" alt="${product.name}" class="product-img" onerror="this.src='https://via.placeholder.com/300?text=Error'">
                     </a>
                 </div>
                 <div class="product-info">
-                    <h4 class="product-title"><a href="chi-tiet-san-pham.html?id=${doc.id}" style="text-decoration: none; color: inherit;">${product.name}</a></h4>
+                    <h4 class="product-title"><a href="chi-tiet-san-pham.html?id=${product.id}" style="text-decoration: none; color: inherit;">${product.name}</a></h4>
                     <div class="product-price">${formatPrice(product.price)}</div>
                     <div style="display: flex; gap: 5px; margin-top: 10px;">
-                        <a href="chi-tiet-san-pham.html?id=${doc.id}" class="btn btn-sm btn-outline-primary" 
+                        <a href="chi-tiet-san-pham.html?id=${product.id}" class="btn btn-sm btn-outline-primary" 
                            style="flex: 1; text-align: center; border: 1px solid var(--primary-color); background: white; color: var(--primary-color);">
                            Chi Tiết
                         </a>
@@ -74,17 +94,25 @@ function addToCart(productName) {
     alert(`Đã thêm "${productName}" vào giỏ hàng! (Chức năng Demo)`);
 }
 
-// Handle Category Hash Links (Simple Client-side Filter)
+// Handle Category Hash Links (Simple Client-side Filter) & Search
 function handleHashChange() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('q');
+
+    if (searchQuery) {
+        console.log("Searching for:", searchQuery);
+        renderProducts(searchQuery, true);
+
+        const titleEl = document.querySelector('.section-title');
+        if (titleEl) titleEl.innerText = `Kết quả tìm kiếm: "${searchQuery}"`;
+        return; // Prioritize search over hash
+    }
+
     const hash = window.location.hash.substring(1); // Remove '#'
     console.log("Filtering by:", hash);
 
-    // Map nice URLs to concise DB values if needed, or just use 1:1
-    // In Admin we set: cay-noi-that, cay-ban-cong, xuong-rong, chau-cay
-    // In Menu we need to match these.
-
     if (hash && hash !== 'top') {
-        renderProducts(hash);
+        renderProducts(hash, false);
 
         // Update Title
         const categoryTitles = {
@@ -112,7 +140,7 @@ function handleHashChange() {
 
 // Initial Load & Hash Change
 document.addEventListener('DOMContentLoaded', () => {
-    handleHashChange(); // Check hash immediately on load
+    handleHashChange(); // Check hash/search immediately on load
 });
 
 window.addEventListener('hashchange', handleHashChange);
