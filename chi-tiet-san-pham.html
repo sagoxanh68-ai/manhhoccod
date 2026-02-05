@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cửa Hàng Cây Xanh - Sago Xanh</title>
-    <meta name="description"
-        content="Mua bán các loại cây cảnh văn phòng, cây nội thất, xương rồng, sen đá đẹp giá rẻ tại TP.HCM. Cung cấp chậu cây và phụ kiện trồng cây.">
-
+    <title>Chi Tiết Sản Phẩm - Sago Xanh</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
         rel="stylesheet">
@@ -18,7 +15,6 @@
 <body>
 
     <header class="header">
-        <!-- 1. Top Bar -->
         <div class="header-top">
             <div class="container">
                 <div class="header-top-left">
@@ -32,7 +28,6 @@
             </div>
         </div>
 
-        <!-- 2. Main Header -->
         <div class="header-main">
             <div class="container">
                 <div class="logo-container">
@@ -43,13 +38,6 @@
                     </div>
                 </div>
 
-                <div class="search-container">
-                    <form class="search-form">
-                        <input type="text" class="search-input" placeholder="Tìm kiếm cây xanh...">
-                        <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
-                    </form>
-                </div>
-
                 <div class="header-contact">
                     <span class="header-contact-label">Hotline: 079.388.9518</span>
                 </div>
@@ -58,21 +46,18 @@
             </div>
         </div>
 
-        <!-- 3. Navigation Bar -->
         <div class="header-nav">
             <div class="container">
                 <nav class="nav-links">
-                    <div class="mobile-close" style="align-self: flex-end; margin-bottom: 20px; display: none;"><i
-                            class="fas fa-times"></i></div>
-
                     <div class="nav-item">
                         <a href="javascript:void(0)" class="nav-link"
                             style="color: #d32f2f; font-weight: 800; border-bottom: 2px solid transparent;">DANH MỤC SẢN
                             PHẨM <i class="fas fa-angle-down" style="font-size: 0.8em;"></i></a>
                         <div class="dropdown-content">
-                            <a href="cua-hang.html#cay-noi-that">Sản Phẩm Cây Xanh (Nội Thất)</a>
-                            <a href="cua-hang.html#cay-ban-cong">Sản Phẩm Cây Ban Công</a>
-                            <a href="cua-hang.html#chau-cay">Chậu Xi Măng & Composite</a>
+                            <a href="cua-hang.html#cay-xanh">Sản Phẩm Cây Xanh</a>
+                            <a href="cua-hang.html#ban-cong">Sản Phẩm Cây Ban Công</a>
+                            <a href="cua-hang.html#chau-xi-mang">Chậu Xi Măng Đá Mài</a>
+                            <a href="cua-hang.html#chau-composite">Chậu Composite</a>
                             <a href="cua-hang.html#gia-the">Giá Thể Trồng Cây</a>
                         </div>
                     </div>
@@ -97,7 +82,7 @@
                     </div>
 
                     <div class="nav-item">
-                        <a href="cua-hang.html" class="nav-link active">Cửa Hàng <i class="fas fa-angle-down"
+                        <a href="cua-hang.html" class="nav-link">Cửa Hàng <i class="fas fa-angle-down"
                                 style="font-size: 0.8em;"></i></a>
                         <div class="dropdown-content">
                             <a href="cua-hang.html#cay-trong-nha">Cây trồng trong nhà</a>
@@ -119,17 +104,10 @@
         </div>
     </header>
 
-    <section class="section bg-off-white" style="padding-top: 100px; text-align: center;">
-        <div class="container">
-            <h1 class="section-title">Cửa Hàng Cây Xanh</h1>
-            <p>Tuyển chọn những chậu cây đẹp nhất cho không gian của bạn</p>
-        </div>
-    </section>
-
     <section class="section">
         <div class="container">
-            <div class="product-grid">
-                <!-- Products will be loaded here via JavaScript -->
+            <div id="product-detail-container">
+                <p style="text-align: center;">Đang tải thông tin sản phẩm...</p>
             </div>
         </div>
     </section>
@@ -138,59 +116,108 @@
         <div class="container">
             <div class="footer-top">
                 <div>
-                    <h3 style="color: white; margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.5rem;">
-                        CẢNH QUAN SAGO XANH</h3>
-                    <p style="opacity: 0.8; margin-bottom: 1rem;">Không gian xanh cho cuộc sống an lành.</p>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="#" style="color: white;"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" style="color: white;"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" style="color: white;"><i class="fab fa-youtube fa-lg"></i></a>
-                    </div>
+                    <h3 style="color: white; margin-bottom: 1rem;">CẢNH QUAN SAGO XANH</h3>
+                    <p style="opacity: 0.8;">Không gian xanh cho cuộc sống an lành.</p>
                 </div>
                 <div>
                     <h4 class="footer-heading">Liên Hệ</h4>
                     <ul class="footer-links" style="opacity: 0.9;">
                         <li><i class="fas fa-map-marker-alt"></i> 86 TCH 36, P. Trung Mỹ Tây, Q.12, TP.HCM</li>
                         <li><i class="fas fa-phone"></i> 079.388.9518</li>
-                        <li><i class="fas fa-envelope"></i> sagoxanh68@gmail.com</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-heading">Dịch Vụ</h4>
-                    <ul class="footer-links">
-                        <li><a href="dich-vu.html">Thiết kê sân vườn</a></li>
-                        <li><a href="dich-vu.html">Trồng cây ban công</a></li>
-                        <li><a href="dich-vu.html">Cho thuê cây văn phòng</a></li>
-                        <li><a href="dich-vu.html">Cho thuê mai tết</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 CẢNH QUAN SAGO XANH. All rights reserved.</p>
+                <p>&copy; 2026 CẢNH QUAN SAGO XANH.</p>
             </div>
         </div>
     </footer>
-    <!-- Floating Contact Buttons -->
-    <div class="floating-contact">
-        <a href="https://zalo.me/0793889518" target="_blank" class="contact-btn zalo-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png"
-                alt="Zalo" style="width: 30px; height: 30px; object-fit: contain;">
-            <span class="contact-tooltip">Chat Zalo</span>
-        </a>
-        <a href="tel:0793889518" class="contact-btn call-btn">
-            <i class="fas fa-phone-alt"></i>
-            <span class="contact-tooltip">Gọi Ngay</span>
-        </a>
-    </div>
 
-    <!-- Firebase SDK (Compat - Same as Admin) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-
-    <!-- Local Scripts -->
     <script src="firebase-config.js"></script>
-    <script src="shop.js"></script>
     <script src="script.js"></script>
+    <script src="comment-system.js"></script>
+
+    <script>
+        // Inline script to handle product detail loading
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const container = document.getElementById('product-detail-container');
+
+            if (!productId) {
+                container.innerHTML = '<p class="text-center">Không tìm thấy sản phẩm.</p>';
+                return;
+            }
+
+            // Helper to format price
+            function formatPrice(price) {
+                if (!price) return 'Liên hệ';
+                const num = parseInt(String(price).replace(/\D/g, ''));
+                if (isNaN(num)) return price;
+                return num.toLocaleString('vi-VN') + 'đ';
+            }
+
+            // Fetch product
+            db.collection("products").doc(productId).get().then((doc) => {
+                if (doc.exists) {
+                    const product = doc.data();
+                    const description = product.description ? product.description.replace(/\n/g, '<br>') : 'Chưa có mô tả chi tiết.';
+
+                    container.innerHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+                            <div style="background: #f9f9f9; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <img src="${product.image}" alt="${product.name}" style="max-width: 100%; max-height: 500px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <h1 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-color);">${product.name}</h1>
+                                <p style="font-size: 1.5rem; color: #d32f2f; font-weight: bold; margin-bottom: 1.5rem;">${formatPrice(product.price)}</p>
+                                <div style="margin-bottom: 2rem;">
+                                    <span style="background: #e8f5e9; color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-weight: 500;">${product.category || 'Cây Cảnh'}</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="alert('Liên hệ 079.388.9518 để mua hàng!')">
+                                    <i class="fas fa-phone-alt"></i> Liên Hệ Mua Ngay
+                                </button>
+                                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+                                <div>
+                                    <h3 style="margin-bottom: 1rem;">Thông tin sản phẩm</h3>
+                                    <p>${product.name} là lựa chọn tuyệt vời cho không gian của bạn.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                            <h2 style="font-family: var(--font-heading); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 5px;">Mô Tả Chi Tiết</h2>
+                            <div style="line-height: 1.8; color: #444; font-size: 1.1rem;">
+                                ${description}
+                            </div>
+                        </div>
+
+
+
+                        <!-- Comment Section -->
+                        <div id="comment-section"></div>
+                    `;
+
+                    // Initialize Comment System
+                    new CommentSystem({
+                        contextId: productId,
+                        containerId: 'comment-section'
+                    });
+
+                } else {
+                    container.innerHTML = '<p class="text-center">Sản phẩm không tồn tại.</p>';
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+                container.innerHTML = '<p class="text-center">Lỗi tải dữ liệu.</p>';
+            });
+
+
+        });
+    </script>
 </body>
 
 </html>

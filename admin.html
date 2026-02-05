@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị - Sago Xanh</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .admin-sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .admin-menu-item {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .admin-menu-item:hover,
+        .admin-menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .admin-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .product-list-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            gap: 1rem;
+        }
+
+        .product-list-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (Simplified) -->
+    <nav class="navbar" style="background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-leaf"></i> SAGO XANH <span style="font-size: 0.8rem; color: #666;">| ADMIN</span>
+            </a>
+            <a href="index.html" class="btn btn-sm btn-outline-primary">Về Trang Chủ</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <h3 style="margin-bottom: 1rem; font-family: var(--font-heading);">Quản Lý</h3>
+            <a href="#" class="admin-menu-item active"><i class="fas fa-box"></i> Sản Phẩm</a>
+            <a href="#" class="admin-menu-item"><i class="fas fa-newspaper"></i> Tin Tức (Coming Soon)</a>
+            <a href="#" class="admin-menu-item"><i class="fas fa-cog"></i> Cấu Hình</a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Quản Lý Sản Phẩm</h2>
+
+            <!-- Add New Product Component -->
+            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="margin-bottom: 1rem;">Thêm Sản Phẩm Mới</h4>
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label class="form-label">Tên Sản Phẩm</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Ví dụ: Cây Kim Tiền"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mô Tả Chi Tiết (Bài Viết)</label>
+                        <textarea class="form-control" id="productDescription" rows="5"
+                            placeholder="Viết bài giới thiệu chi tiết về sản phẩm..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label class="form-label">Giá (VND)</label>
+                                <input type="text" class="form-control" id="productPrice" placeholder="Ví dụ: 150.000₫"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="form-label">Danh Mục</label>
+                                <select class="form-control" id="productCategory">
+                                    <option value="" disabled selected>-- Chọn danh mục --</option>
+                                    <optgroup label="Danh Mục Cửa Hàng">
+                                        <option value="cay-trong-nha">Cây trồng trong nhà</option>
+                                        <option value="cay-san-vuon">Cây trồng sân vườn</option>
+                                        <option value="cay-cong-trinh">Cây công trình</option>
+                                        <option value="cay-an-trai">Cây trồng ăn trái</option>
+                                    </optgroup>
+                                    <optgroup label="Danh Mục Sản Phẩm (Menu Đỏ)">
+                                        <option value="cay-xanh">Sản Phẩm Cây Xanh</option>
+                                        <option value="ban-cong">Sản Phẩm Cây Ban Công</option>
+                                        <option value="chau-xi-mang">Chậu Xi Măng Đá Mài</option>
+                                        <option value="chau-composite">Chậu Composite</option>
+                                        <option value="gia-the">Giá Thể Trồng Cây</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hình Ảnh</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" class="form-control" id="productImageFile" accept="image/*">
+                            <span style="font-size: 0.9rem; color: #666;">Hoặc</span>
+                            <input type="url" class="form-control" id="productImage"
+                                placeholder="Dán link ảnh (nếu không up file)">
+                        </div>
+                        <small style="color: #666;">Chọn ảnh từ máy tính (Khuyên dùng) hoặc dán link ảnh.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
+                </form>
+            </div>
+
+            <!-- List Products -->
+            <div>
+                <h4 style="margin-bottom: 1rem;">Danh Sách Sản Phẩm Hiện Có</h4>
+                <div id="adminProductList">
+                    <p style="text-align: center; color: #999; padding: 2rem;">Đang tải dữ liệu...</p>
+                    <!-- JavaScript will populate this -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK (Version 9+ Modular) - Using compatibility for easier setup in vanilla JS -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+
+    <!-- Local Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

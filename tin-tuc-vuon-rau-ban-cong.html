@@ -95,10 +95,10 @@
                         <a href="cua-hang.html" class="nav-link">Cửa Hàng <i class="fas fa-angle-down"
                                 style="font-size: 0.8em;"></i></a>
                         <div class="dropdown-content">
-                            <a href="cua-hang.html#noi-that">Cây nội thất</a>
-                            <a href="cua-hang.html#ngoai-that">Cây ngoại thất</a>
-                            <a href="cua-hang.html#xuong-rong">Xương rồng & Sen đá</a>
-                            <a href="cua-hang.html#chau-cay">Chậu cây & Phụ kiện</a>
+                            <a href="cua-hang.html#cay-trong-nha">Cây trồng trong nhà</a>
+                            <a href="cua-hang.html#cay-san-vuon">Cây trồng sân vườn</a>
+                            <a href="cua-hang.html#cay-cong-trinh">Cây công trình</a>
+                            <a href="cua-hang.html#cay-an-trai">Cây trồng ăn trái</a>
                         </div>
                     </div>
 
@@ -158,6 +158,8 @@
                 phân trùn quế. Hỗn hợp này đảm bảo thoát nước tốt mà vẫn giữ đủ ẩm.</p>
 
             <h2 id="muc-3">3. Các Loại Rau Dễ Trồng Cho Người Mới</h2>
+            <img src="https://images.unsplash.com/photo-1598512752271-33f913a5af13?q=80&w=2070&auto=format&fit=crop"
+                alt="Các loại rau dễ trồng" style="margin-top: 1rem; margin-bottom: 1rem;">
             <p>Hãy bắt đầu với những loại "dễ tính" sau:</p>
             <ul style="margin-bottom: 1rem; list-style-type: circle; padding-left: 2rem;">
                 <li><strong>Rau ăn lá:</strong> Mồng tơi, rau muống, cải ngọt (thu hoạch sau 25-30 ngày).</li>
@@ -166,6 +168,8 @@
             </ul>
 
             <h2 id="muc-4">4. Chống Sâu Bệnh An Toàn</h2>
+            <img src="https://images.unsplash.com/photo-1628186252994-0268527a20c3?q=80&w=1974&auto=format&fit=crop"
+                alt="Chăm sóc rau an toàn" style="margin-top: 1rem; margin-bottom: 1rem;">
             <p>Tuyệt đối không dùng thuốc hóa học. Hãy dùng dung dịch tỏi + ớt + gừng ngâm rượu, hoặc nước rửa chén pha
                 loãng để phun trị rệp và sâu. Trồng xen kẽ các cây gia vị có mùi (hương thảo, húng chanh) cũng giúp xua
                 đuổi côn trùng hiệu quả.</p>
@@ -181,6 +185,10 @@
                 <a href="dich-vu.html" class="btn btn-primary" style="margin-left: 1rem;">Xem Dịch Vụ Ban Công <i
                         class="fas fa-layer-group"></i></a>
             </div>
+
+            <!-- Comment Section -->
+            <div id="comment-section"></div>
+
         </main>
 
         <aside class="blog-sidebar">
@@ -206,6 +214,10 @@
 
             <div class="sidebar-widget">
                 <h3 class="widget-title">Bài Viết Mới</h3>
+                <a href="tin-tuc-xu-huong-san-vuon.html" class="mini-news-item">
+                    <h4 class="mini-news-title">Xu Hướng Sân Vườn Nhiệt Đới 2026</h4>
+                    <span class="mini-news-date"><i class="far fa-clock"></i> 28 Th1, 2026</span>
+                </a>
                 <a href="tin-tuc-cham-soc-kim-tien.html" class="mini-news-item">
                     <h4 class="mini-news-title">Bí Quyết Chăm Sóc Cây Kim Tiền</h4>
                     <span class="mini-news-date"><i class="far fa-clock"></i> 15 Th1, 2026</span>
@@ -268,7 +280,23 @@
         </a>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
+
+    <!-- Comment System -->
+    <script src="comment-system.js"></script>
+    <script>
+        // Init Comment System
+        document.addEventListener('DOMContentLoaded', () => {
+            new CommentSystem({
+                contextId: 'vuon-rau-ban-cong',
+                containerId: 'comment-section'
+            });
+        });
+    </script>
 </body>
 
 </html>

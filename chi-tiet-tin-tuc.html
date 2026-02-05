@@ -95,10 +95,10 @@
                         <a href="cua-hang.html" class="nav-link">Cửa Hàng <i class="fas fa-angle-down"
                                 style="font-size: 0.8em;"></i></a>
                         <div class="dropdown-content">
-                            <a href="cua-hang.html#noi-that">Cây nội thất</a>
-                            <a href="cua-hang.html#ngoai-that">Cây ngoại thất</a>
-                            <a href="cua-hang.html#xuong-rong">Xương rồng & Sen đá</a>
-                            <a href="cua-hang.html#chau-cay">Chậu cây & Phụ kiện</a>
+                            <a href="cua-hang.html#cay-trong-nha">Cây trồng trong nhà</a>
+                            <a href="cua-hang.html#cay-san-vuon">Cây trồng sân vườn</a>
+                            <a href="cua-hang.html#cay-cong-trinh">Cây công trình</a>
+                            <a href="cua-hang.html#cay-an-trai">Cây trồng ăn trái</a>
                         </div>
                     </div>
 
@@ -305,7 +305,34 @@
         </a>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
+
+    <!-- Comment System -->
+    <script src="comment-system.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Using a static ID for this specific article URL
+            //Ideally this would be dynamic if we had a proper CMS
+            const articleId = 'top-5-cay-loc-khong-khi';
+
+            // Add container if not present
+            const mainContent = document.querySelector('.blog-main');
+            if (mainContent) {
+                const commentSection = document.createElement('div');
+                commentSection.id = 'comment-section';
+                mainContent.appendChild(commentSection);
+
+                new CommentSystem({
+                    contextId: articleId,
+                    containerId: 'comment-section'
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
