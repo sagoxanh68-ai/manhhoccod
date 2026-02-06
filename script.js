@@ -135,8 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
             header.style.userSelect = 'none'; // Prevent text selection
 
             header.addEventListener('click', () => {
-                // Toggle Class
+                // Toggle Class on List
                 list.classList.toggle('hidden');
+
+                // Toggle Class on Container for styling (padding, etc)
+                header.parentElement.classList.toggle('collapsed');
 
                 // Rotate Icon
                 if (list.classList.contains('hidden')) {

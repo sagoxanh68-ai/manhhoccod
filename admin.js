@@ -12,21 +12,14 @@ function resetTabs() {
     productSection.style.display = 'none';
     newsSection.style.display = 'none';
     serviceSection.style.display = 'none';
-    document.getElementById('configForm').parentElement.style.display = 'none'; // Config is wrapped in a div in the snippet I saw, let's check. 
-    // Actually, looking at previous admin.html code:
-    // Config was just a form inside a div, but didn't have a wrapper ID 'configSection' in the snippet I saw earlier? 
-    // Wait, let's check admin.html for config wrapper.
+    const configSection = document.getElementById('configSection');
+    if (configSection) configSection.style.display = 'none';
     menuItems.forEach(item => item.classList.remove('active'));
 }
 
 function switchTab(tabName) {
     // 1. Reset All
-    productSection.style.display = 'none';
-    if (newsSection) newsSection.style.display = 'none';
-    if (serviceSection) serviceSection.style.display = 'none';
-    if (document.getElementById('configForm')) document.getElementById('configForm').parentElement.style.display = 'none';
-
-    menuItems.forEach(i => i.classList.remove('active'));
+    resetTabs();
 
     // 2. Activate Target
     if (tabName === 'product') {
@@ -42,17 +35,50 @@ function switchTab(tabName) {
         menuItems[2].classList.add('active');
         loadNews();
     } else if (tabName === 'config') {
-        const configContainer = document.getElementById('configSection'); // Use correct ID
+        const configContainer = document.getElementById('configSection');
         if (configContainer) configContainer.style.display = 'block';
         menuItems[3].classList.add('active');
         loadConfig();
     }
 }
 
+// Debug Logger
+function logToScreen(msg) {
+    const log = document.getElementById('debug-log');
+    if (log) {
+        log.style.display = 'block';
+        log.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
+        log.scrollTop = log.scrollHeight;
+    }
+    console.log(msg);
+}
+
 // Initial Load
 document.addEventListener('DOMContentLoaded', () => {
-    // Set initial tab to 'product' or the first one
-    switchTab('product');
+    logToScreen("Admin DOM Content Loaded.");
+
+    // Check if Firebase globals exist immediately
+    if (typeof firebase === 'undefined') {
+        logToScreen("CRITICAL ERROR: Firebase SDK not loaded!");
+        return;
+    } else {
+        logToScreen("Firebase SDK detected.");
+    }
+
+    setTimeout(() => {
+        logToScreen("Checking for window.db...");
+        if (window.db) {
+            logToScreen("DB Found. Switching to 'product' tab...");
+            try {
+                switchTab('product');
+            } catch (err) {
+                logToScreen("ERROR in switchTab: " + err.message);
+            }
+        } else {
+            logToScreen("ERROR: window.db is undefined! Check firebase-config.js");
+            alert("Lỗi: Không kết nối được Firebase DB. Vui lòng tải lại trang.");
+        }
+    }, 1000); // Increased buffer to 1000ms
 });
 
 
@@ -90,75 +116,120 @@ const fileToBase64 = (file) => {
 async function handleImageUpload(file, currentUrl, btnRef) {
     if (!file) return currentUrl; // No new file, keep old URL
 
-    // Try Storage first
+    // FORCE BASE64 (Fixing Upload Issues)
     try {
-        if (btnRef) btnRef.innerText = "Đang tải ảnh lên Cloud...";
-
-        const storageRef = firebase.storage().ref('uploads/' + Date.now() + '-' + file.name);
-        // 5s Timeout for Storage
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000));
-
-        await Promise.race([storageRef.put(file), timeoutPromise]);
-        return await storageRef.getDownloadURL();
-
+        if (btnRef) btnRef.innerText = "Đang xử lý ảnh...";
+        const base64Url = await fileToBase64(file);
+        return base64Url;
     } catch (e) {
-        console.warn("Storage upload failed/timed out. using Base64 fallback.");
-        if (btnRef) btnRef.innerText = "Chuyển sang chế độ nén ảnh (Base64)...";
-        return await fileToBase64(file);
+        console.error("Image processing failed:", e);
+        alert("Lỗi xử lý ảnh: " + e.message);
+        return currentUrl;
     }
 }
 
-
-// --- 1. PRODUCT MANAGEMENT ---
+// --- 2. PRODUCT MANAGEMENT ---
 const addProductForm = document.getElementById('addProductForm');
+const adminProductList = document.getElementById('adminProductList');
+const submitProductBtn = document.getElementById('submitProductBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
+const formTitle = document.getElementById('formTitle');
 
-// Reset Form State
-function resetProductForm() {
-    addProductForm.reset();
-    document.getElementById('editProductId').value = '';
-    document.getElementById('formTitle').innerText = 'Thêm Sản Phẩm Mới';
-    document.getElementById('submitProductBtn').innerText = 'Lưu Sản Phẩm';
-    cancelEditBtn.style.display = 'none';
+// Toggle Edit Mode vs Add Mode
+function setProductEditMode(isEdit) {
+    const editIdInput = document.getElementById('editProductId');
+    if (!isEdit) {
+        addProductForm.reset();
+        editIdInput.value = '';
+        formTitle.innerText = "Thêm Sản Phẩm Mới";
+        submitProductBtn.innerText = "Lưu Sản Phẩm";
+        cancelEditBtn.style.display = 'none';
+    } else {
+        formTitle.innerText = "Sửa Sản Phẩm";
+        submitProductBtn.innerText = "Cập Nhật";
+        cancelEditBtn.style.display = 'inline-block';
+    }
 }
 
-cancelEditBtn.addEventListener('click', resetProductForm);
+cancelEditBtn.addEventListener('click', () => {
+    setProductEditMode(false);
+});
 
+// Load Products
+function loadProducts() {
+    logToScreen("Function loadProducts called.");
+    if (!adminProductList) {
+        logToScreen("ERROR: adminProductList element not found!");
+        return;
+    }
+
+    adminProductList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải (JS Active)...</p>';
+    logToScreen("Connecting to Firestore 'products'...");
+
+    db.collection("products").orderBy("createdAt", "desc").get().then((querySnapshot) => {
+        logToScreen(`Firestore response received. Docs: ${querySnapshot.size}`);
+
+        adminProductList.innerHTML = '';
+        if (querySnapshot.empty) {
+            adminProductList.innerHTML = '<p style="text-align: center; padding: 1rem;">Chưa có sản phẩm nào.</p>';
+            return;
+        }
+
+        let html = '';
+        querySnapshot.forEach((doc) => {
+            const p = doc.data();
+            // Encode data for safe passing to edit function
+            const dataSafe = encodeURIComponent(JSON.stringify({ ...p, id: doc.id }));
+
+            html += `
+            <div class="product-list-item">
+                <img src="${p.image || 'https://via.placeholder.com/60'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/60'">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">${p.name}</div>
+                    <div style="color: #666; font-size: 0.9em;">${p.category || 'Chưa phân loại'} - ${p.price || 'Liên hệ'}</div>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="editProduct('${dataSafe}')">Sửa</button>
+                    <button class="btn btn-sm" style="background: #ff4444; color: white; margin-left: 5px;" onclick="deleteProduct('${doc.id}')">Xóa</button>
+                </div>
+            </div>`;
+        });
+        adminProductList.innerHTML = html;
+    }).catch((error) => {
+        console.error("Error loading products: ", error);
+        adminProductList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
+    });
+}
+
+// Add/Update Product
 addProductForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const submitBtn = document.getElementById('submitProductBtn');
-    submitBtn.disabled = true;
-    const originalText = submitBtn.innerText;
+    const originalText = submitProductBtn.innerText;
+    submitProductBtn.disabled = true;
+    submitProductBtn.innerText = 'Đang xử lý...';
+
+    const id = document.getElementById('editProductId').value;
+    const name = document.getElementById('productName').value;
+    const desc = document.getElementById('productDescription').value;
+    const price = document.getElementById('productPrice').value;
+    const category = document.getElementById('productCategory').value;
+    const imageInput = document.getElementById('productImageFile');
+    const imageUrlInput = document.getElementById('productImage');
+
+    let finalImageUrl = imageUrlInput.value;
 
     try {
-        const id = document.getElementById('editProductId').value;
-        const name = document.getElementById('productName').value;
-        const price = document.getElementById('productPrice').value;
-        const category = document.getElementById('productCategory').value;
-        const description = document.getElementById('productDescription').value;
-
-        const imageFile = document.getElementById('productImageFile').files[0];
-        const imageUrlInput = document.getElementById('productImage').value;
-
-        // Validation
-        if (!name || !price) throw new Error("Vui lòng nhập tên và giá!");
-        if (!id && !imageFile && !imageUrlInput) throw new Error("Vui lòng chọn ảnh!");
-
-        // Determine Image URL
-        // If editing and no new image provided, keep existing (we need to fetch it or pass it? 
-        // Actually, for simplicity, if input is empty we assume keep old, but we need current val.
-        // Let's rely on handleImageUpload logic: passes currentUrl if file is null.
-        // BUT currentUrl comes from input value? No, file input is clear. 
-        // Logic: If file -> upload. If urlInput -> use it. If neither -> Keep old (only for Edit).
-
-        // For 'Keep Old', we usually store the old URL in the URL input when clicking 'Edit'
-        let finalImageUrl = imageUrlInput;
-        if (imageFile) {
-            finalImageUrl = await handleImageUpload(imageFile, imageUrlInput, submitBtn);
+        // Upload image if file selected
+        if (imageInput.files[0]) {
+            submitProductBtn.innerText = 'Đang tải ảnh...';
+            finalImageUrl = await handleImageUpload(imageInput.files[0], finalImageUrl, submitProductBtn);
         }
 
         const productData = {
-            name, price, category, description,
+            name: name,
+            description: desc,
+            price: price,
+            category: category,
             image: finalImageUrl,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
@@ -167,181 +238,170 @@ addProductForm.addEventListener('submit', async (e) => {
             // Update
             await db.collection("products").doc(id).update(productData);
             alert("Cập nhật sản phẩm thành công!");
+            setProductEditMode(false);
         } else {
-            // Create
+            // Add New
             productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             await db.collection("products").add(productData);
             alert("Thêm sản phẩm thành công!");
+            addProductForm.reset();
         }
-
-        resetProductForm();
         loadProducts();
 
     } catch (error) {
+        console.error("Error saving product: ", error);
         alert("Lỗi: " + error.message);
-        console.error(error);
     } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = originalText;
+        submitProductBtn.disabled = false;
+        submitProductBtn.innerText = originalText;
     }
 });
 
-function loadProducts() {
-    const list = document.getElementById('adminProductList');
-    list.innerHTML = '<p style="text-align:center">Đang tải...</p>';
-
-    db.collection("products").orderBy("createdAt", "desc").get().then(snap => {
-        if (snap.empty) {
-            list.innerHTML = '<p style="text-align:center">Chưa có dữ liệu.</p>';
-            return;
-        }
-
-        let html = '';
-        snap.forEach(doc => {
-            const p = doc.data();
-            // Encode data for safety in onclick
-            const dataSafe = encodeURIComponent(JSON.stringify({ ...p, id: doc.id }));
-
-            html += `
-                <div class="product-list-item">
-                    <img src="${p.image || 'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
-                    <div style="flex:1">
-                        <h4>${p.name}</h4>
-                        <span style="color:#d32f2f; font-weight:bold">${p.price}</span>
-                        <small style="margin-left:10px; background:#eee; padding:2px 5px">${p.category}</small>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="editProduct('${dataSafe}')">Sửa</button>
-                        <button class="btn btn-sm" style="background:#ff4444; color:white; margin-left:5px" onclick="deleteProduct('${doc.id}')">Xóa</button>
-                    </div>
-                </div>
-            `;
-        });
-        list.innerHTML = html;
-    });
-}
-
+// Edit Product Trigger
 function editProduct(encodedData) {
     const p = JSON.parse(decodeURIComponent(encodedData));
 
     document.getElementById('editProductId').value = p.id;
     document.getElementById('productName').value = p.name;
+    document.getElementById('productDescription').value = p.description;
     document.getElementById('productPrice').value = p.price;
     document.getElementById('productCategory').value = p.category;
-    document.getElementById('productDescription').value = p.description || '';
     document.getElementById('productImage').value = p.image || '';
 
+    setProductEditMode(true);
     // Scroll to form
-    document.getElementById('productSection').scrollIntoView({ behavior: 'smooth' });
-
-    // UI Changes
-    document.getElementById('formTitle').innerText = 'Chỉnh Sửa Sản Phẩm: ' + p.name;
-    document.getElementById('submitProductBtn').innerText = 'Cập Nhật Ngay';
-    cancelEditBtn.style.display = 'inline-block';
+    addProductForm.scrollIntoView({ behavior: 'smooth' });
 }
 
+// Delete Product
 function deleteProduct(id) {
-    if (confirm('Bạn có chắc chắn xóa?')) {
-        db.collection('products').doc(id).delete().then(loadProducts);
+    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+        db.collection("products").doc(id).delete().then(() => {
+            loadProducts();
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+            alert("Lỗi khi xóa: " + error.message);
+        });
     }
 }
 
 
-// --- 2. NEWS MANAGEMENT ---
+// --- 2.5 NEWS MANAGEMENT ---
 const addNewsForm = document.getElementById('addNewsForm');
+const adminNewsList = document.getElementById('adminNewsList');
+const submitNewsBtn = document.getElementById('submitNewsBtn');
 const cancelNewsEditBtn = document.getElementById('cancelNewsEditBtn');
+const newsFormTitle = document.getElementById('newsFormTitle');
 
-function resetNewsForm() {
-    addNewsForm.reset();
-    document.getElementById('editNewsId').value = '';
-    document.getElementById('newsFormTitle').innerText = 'Thêm Tin Tức Mới';
-    document.getElementById('submitNewsBtn').innerText = 'Đăng Bài';
-    cancelNewsEditBtn.style.display = 'none';
+// Toggle News Edit Mode
+function setNewsEditMode(isEdit) {
+    const editIdInput = document.getElementById('editNewsId');
+    if (!isEdit) {
+        addNewsForm.reset();
+        editIdInput.value = '';
+        newsFormTitle.innerText = "Thêm Tin Tức Mới";
+        submitNewsBtn.innerText = "Đăng Bài";
+        cancelNewsEditBtn.style.display = 'none';
+    } else {
+        newsFormTitle.innerText = "Sửa Tin Tức";
+        submitNewsBtn.innerText = "Cập Nhật";
+        cancelNewsEditBtn.style.display = 'inline-block';
+    }
 }
 
-cancelNewsEditBtn.addEventListener('click', resetNewsForm);
+cancelNewsEditBtn.addEventListener('click', () => {
+    setNewsEditMode(false);
+});
 
+// Load News
+function loadNews() {
+    if (!adminNewsList) return;
+    adminNewsList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải...</p>';
+
+    db.collection("news").orderBy("createdAt", "desc").get().then((querySnapshot) => {
+        adminNewsList.innerHTML = '';
+        if (querySnapshot.empty) {
+            adminNewsList.innerHTML = '<p style="text-align: center; padding: 1rem;">Chưa có bài viết nào.</p>';
+            return;
+        }
+
+        let html = '';
+        querySnapshot.forEach((doc) => {
+            const n = doc.data();
+            const dataSafe = encodeURIComponent(JSON.stringify({ ...n, id: doc.id }));
+
+            html += `
+            <div class="product-list-item">
+                <img src="${n.image || 'https://via.placeholder.com/60'}" alt="${n.title}" onerror="this.src='https://via.placeholder.com/60'">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">${n.title}</div>
+                    <div style="color: #666; font-size: 0.9em; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${n.excerpt || ''}</div>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="editNews('${dataSafe}')">Sửa</button>
+                    <button class="btn btn-sm" style="background: #ff4444; color: white; margin-left: 5px;" onclick="deleteNews('${doc.id}')">Xóa</button>
+                </div>
+            </div>`;
+        });
+        adminNewsList.innerHTML = html;
+    }).catch((error) => {
+        console.error("Error loading news: ", error);
+        adminNewsList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
+    });
+}
+
+// Add/Update News
 addNewsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const submitBtn = document.getElementById('submitNewsBtn');
-    submitBtn.disabled = true;
-    const originalText = submitBtn.innerText;
+    const originalText = submitNewsBtn.innerText;
+    submitNewsBtn.disabled = true;
+    submitNewsBtn.innerText = 'Đang đăng...';
+
+    const id = document.getElementById('editNewsId').value;
+    const title = document.getElementById('newsTitle').value;
+    const excerpt = document.getElementById('newsExcerpt').value;
+    const content = document.getElementById('newsContent').value;
+    const imageInput = document.getElementById('newsImageFile');
+    const imageUrlInput = document.getElementById('newsImage');
+
+    let finalImageUrl = imageUrlInput.value;
 
     try {
-        const id = document.getElementById('editNewsId').value;
-        const title = document.getElementById('newsTitle').value;
-        const excerpt = document.getElementById('newsExcerpt').value;
-        const content = document.getElementById('newsContent').value;
-
-        const imageFile = document.getElementById('newsImageFile').files[0];
-        const imageUrlInput = document.getElementById('newsImage').value;
-
-        if (!title) throw new Error("Tiêu đề là bắt buộc!");
-
-        let finalImageUrl = imageUrlInput;
-        if (imageFile) {
-            finalImageUrl = await handleImageUpload(imageFile, imageUrlInput, submitBtn);
+        if (imageInput.files[0]) {
+            submitNewsBtn.innerText = 'Đang tải ảnh...';
+            finalImageUrl = await handleImageUpload(imageInput.files[0], finalImageUrl, submitNewsBtn);
         }
 
         const newsData = {
-            title, excerpt, content,
+            title: title,
+            excerpt: excerpt,
+            content: content,
             image: finalImageUrl,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
         if (id) {
             await db.collection("news").doc(id).update(newsData);
-            alert("Cập nhật tin tức thành công!");
+            alert("Cập nhật bài viết thành công!");
+            setNewsEditMode(false);
         } else {
             newsData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             await db.collection("news").add(newsData);
-            alert("Đăng tin thành công!");
+            alert("Đăng bài thành công!");
+            addNewsForm.reset();
         }
-
-        resetNewsForm();
         loadNews();
 
-    } catch (e) {
-        alert("Lỗi: " + e.message);
+    } catch (error) {
+        console.error("Error saving news: ", error);
+        alert("Lỗi: " + error.message);
     } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = originalText;
+        submitNewsBtn.disabled = false;
+        submitNewsBtn.innerText = originalText;
     }
 });
 
-function loadNews() {
-    const list = document.getElementById('adminNewsList');
-    list.innerHTML = '<p style="text-align:center">Đang tải...</p>';
-
-    db.collection("news").orderBy("createdAt", "desc").get().then(snap => {
-        if (snap.empty) {
-            list.innerHTML = '<p style="text-align:center">Chưa có bài viết.</p>';
-            return;
-        }
-
-        let html = '';
-        snap.forEach(doc => {
-            const n = doc.data();
-            const dataSafe = encodeURIComponent(JSON.stringify({ ...n, id: doc.id }));
-
-            html += `
-                <div class="product-list-item">
-                    <img src="${n.image || 'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
-                    <div style="flex:1">
-                        <h4>${n.title}</h4>
-                        <p style="font-size:0.8rem; color:#666; margin:0">${n.excerpt || ''}</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="editNews('${dataSafe}')">Sửa</button>
-                        <button class="btn btn-sm" style="background:#ff4444; color:white; margin-left:5px" onclick="deleteNews('${doc.id}')">Xóa</button>
-                    </div>
-                </div>
-            `;
-        });
-        list.innerHTML = html;
-    });
-}
-
+// Edit News Trigger
 function editNews(encodedData) {
     const n = JSON.parse(decodeURIComponent(encodedData));
 
@@ -351,16 +411,19 @@ function editNews(encodedData) {
     document.getElementById('newsContent').value = n.content;
     document.getElementById('newsImage').value = n.image || '';
 
-    document.getElementById('newsSection').scrollIntoView({ behavior: 'smooth' });
-
-    document.getElementById('newsFormTitle').innerText = 'Sửa Bài Viết';
-    document.getElementById('submitNewsBtn').innerText = 'Cập Nhật';
-    cancelNewsEditBtn.style.display = 'inline-block';
+    setNewsEditMode(true);
+    addNewsForm.scrollIntoView({ behavior: 'smooth' });
 }
 
+// Delete News
 function deleteNews(id) {
-    if (confirm('Xóa bài viết này?')) {
-        db.collection('news').doc(id).delete().then(loadNews);
+    if (confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+        db.collection("news").doc(id).delete().then(() => {
+            loadNews();
+        }).catch((error) => {
+            console.error("Error removing news: ", error);
+            alert("Lỗi khi xóa: " + error.message);
+        });
     }
 }
 
@@ -378,12 +441,11 @@ async function insertContentImage(fileInputId, textareaId, btnId) {
 
     try {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải lên...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
 
         const file = fileInput.files[0];
-        const ref = storage.ref(`content_images/${Date.now()}_${file.name}`);
-        await ref.put(file);
-        const url = await ref.getDownloadURL();
+        // Use Base64 instead of Storage
+        const url = await fileToBase64(file);
 
         // Insert into textarea
         const imgTag = `\n<img src="${url}" alt="Ảnh minh họa" style="width: 100%; height: auto; border-radius: 8px; margin: 10px 0;">\n`;
@@ -403,7 +465,7 @@ async function insertContentImage(fileInputId, textareaId, btnId) {
 
     } catch (error) {
         console.error("Insert img error:", error);
-        alert("Lỗi tải ảnh: " + error.message);
+        alert("Lỗi xử lý ảnh: " + error.message);
     } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;

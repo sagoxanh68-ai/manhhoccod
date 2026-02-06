@@ -14,50 +14,78 @@ document.addEventListener('DOMContentLoaded', () => {
     loadServiceDetail(serviceId);
 });
 
+// Global error safety
+window.addEventListener('error', function (e) {
+    console.error("Global Script Error:", e.message);
+    const content = document.getElementById('newsContent');
+    if (content) content.innerHTML = `<p class="text-center" style="color:red">Lỗi hệ thống: ${e.message}</p>`;
+});
+
 function loadServiceDetail(id) {
-    db.collection('services').doc(id).get().then(doc => {
-        if (doc.exists) {
-            const data = doc.data();
+    console.log("Starting loadServiceDetail for ID:", id);
 
-            // Update Meta Tags (Basic)
-            document.title = `${data.title} - Cảnh Quan Sago Xanh`;
+    // Timeout Promise
+    const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out (10s). Kiểm tra kết nối mạng.")), 10000)
+    );
 
-            // Update UI Elements
-            // Note: We are reusing the IDs from the news template to avoid renaming everything in HTML
-            // headerTitle -> newsTitle
-            // headerExcerpt -> newsExcerpt
-            const header = document.getElementById('newsHeader');
-            const title = document.getElementById('newsTitle');
-            const excerpt = document.getElementById('newsExcerpt');
-            const content = document.getElementById('newsContent');
-            const date = document.getElementById('newsDate');
+    // Fetch Promise
+    const fetchPromise = db.collection('services').doc(id).get();
 
-            if (data.image) {
-                header.style.backgroundImage = `linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('${data.image}')`;
+    // Race them
+    Promise.race([fetchPromise, timeout])
+        .then(doc => {
+            console.log("Firestore response received.");
+            if (doc.exists) {
+                console.log("Document exists:", doc.id);
+                const data = doc.data();
+
+                // Update Meta Tags
+                document.title = `${data.title} - Cảnh Quan Sago Xanh`;
+
+                // Update UI Elements
+                const header = document.getElementById('newsHeader');
+                const title = document.getElementById('newsTitle');
+                const excerpt = document.getElementById('newsExcerpt');
+                const content = document.getElementById('newsContent');
+                const date = document.getElementById('newsDate');
+
+                if (data.image) {
+                    header.style.backgroundImage = `linear-gradient(rgba(11, 94, 40, 0.8), rgba(11, 94, 40, 0.8)), url('${data.image}')`;
+                }
+
+                title.innerText = data.title;
+                excerpt.innerText = data.excerpt || '';
+                content.innerHTML = data.content || '';
+
+                if (data.updatedAt) {
+                    const dateObj = data.updatedAt.toDate();
+                    date.innerHTML = `<i class="far fa-clock"></i> Cập nhật: ${dateObj.toLocaleDateString('vi-VN')}`;
+                } else if (data.createdAt) {
+                    const dateObj = data.createdAt.toDate();
+                    date.innerHTML = `<i class="far fa-clock"></i> ${dateObj.toLocaleDateString('vi-VN')}`;
+                }
+
+                generateTOC();
+
+            } else {
+                console.warn("Document not found");
+                document.getElementById('newsTitle').innerText = '404';
+                document.getElementById('newsExcerpt').innerText = 'Không tìm thấy trang';
+                document.getElementById('newsContent').innerHTML = '<p class="text-center">Bài viết không tồn tại hoặc đã bị xóa.</p>';
             }
-
-            title.innerText = data.title;
-            excerpt.innerText = data.excerpt || '';
-            content.innerHTML = data.content || '';
-
-            if (data.updatedAt) {
-                const dateObj = data.updatedAt.toDate();
-                date.innerHTML = `<i class="far fa-clock"></i> Cập nhật: ${dateObj.toLocaleDateString('vi-VN')}`;
-            } else if (data.createdAt) {
-                const dateObj = data.createdAt.toDate();
-                date.innerHTML = `<i class="far fa-clock"></i> ${dateObj.toLocaleDateString('vi-VN')}`;
-            }
-
-            // Generate TOC (Reusing existing script.js logic if available, or custom)
-            generateTOC();
-
-        } else {
-            document.getElementById('newsContent').innerHTML = '<p class="text-center">Bài viết không tồn tại hoặc đã bị xóa.</p>';
-        }
-    }).catch(error => {
-        console.error("Error loading service:", error);
-        document.getElementById('newsContent').innerHTML = '<p class="text-center">Lỗi tải dữ liệu.</p>';
-    });
+        }).catch(error => {
+            console.error("Error loading service (Catch Block):", error);
+            document.getElementById('newsTitle').innerText = 'Lỗi Tải Trang';
+            document.getElementById('newsExcerpt').innerText = 'Vui lòng tải lại trang';
+            document.getElementById('newsContent').innerHTML = `
+            <div class="text-center" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: 20px; border-radius: 5px;">
+                <h4>Đã xảy ra lỗi khi tải dữ liệu</h4>
+                <p>Chi tiết: ${error.message}</p>
+                <button onclick="location.reload()" class="btn btn-primary" style="margin-top:10px">Tải Lại Trang</button>
+            </div>
+        `;
+        });
 }
 
 function generateTOC() {
