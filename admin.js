@@ -42,15 +42,9 @@ function switchTab(tabName) {
     }
 }
 
-// Debug Logger
+// Debug Logger (Silent)
 function logToScreen(msg) {
-    const log = document.getElementById('debug-log');
-    if (log) {
-        log.style.display = 'block';
-        log.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
-        log.scrollTop = log.scrollHeight;
-    }
-    console.log(msg);
+    console.log(`[Admin] ${msg}`);
 }
 
 // Initial Load
@@ -155,25 +149,46 @@ cancelEditBtn.addEventListener('click', () => {
     setProductEditMode(false);
 });
 
-// Load Products
-function loadProducts() {
+// Load Products with Pagination
+let lastProductVisible = null;
+const PRODUCTS_PER_PAGE = 20;
+
+function loadProducts(isNextPage = false) {
     logToScreen("Function loadProducts called.");
     if (!adminProductList) {
         logToScreen("ERROR: adminProductList element not found!");
         return;
     }
 
-    adminProductList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải (JS Active)...</p>';
-    logToScreen("Connecting to Firestore 'products'...");
+    if (!isNextPage) {
+        adminProductList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải (JS Active)...</p>';
+        lastProductVisible = null; // Reset cursor
+    }
 
-    db.collection("products").orderBy("createdAt", "desc").get().then((querySnapshot) => {
+    let query = db.collection("products").orderBy("createdAt", "desc").limit(PRODUCTS_PER_PAGE);
+
+    if (isNextPage && lastProductVisible) {
+        query = query.startAfter(lastProductVisible);
+    }
+
+    query.get().then((querySnapshot) => {
         logToScreen(`Firestore response received. Docs: ${querySnapshot.size}`);
 
-        adminProductList.innerHTML = '';
-        if (querySnapshot.empty) {
+        if (!isNextPage) {
+            adminProductList.innerHTML = '';
+        } else {
+            // Remove old "Load More" button if exists
+            const oldBtn = document.getElementById('btnLoadMoreProducts');
+            if (oldBtn) oldBtn.remove();
+        }
+
+        if (querySnapshot.empty && !isNextPage) {
             adminProductList.innerHTML = '<p style="text-align: center; padding: 1rem;">Chưa có sản phẩm nào.</p>';
             return;
         }
+
+        // Update cursor
+        lastProductVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
         let html = '';
         querySnapshot.forEach((doc) => {
@@ -183,7 +198,7 @@ function loadProducts() {
 
             html += `
             <div class="product-list-item">
-                <img src="${p.image || 'https://via.placeholder.com/60'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/60'">
+                <img src="${p.image || 'https://via.placeholder.com/60'}" alt="${p.name}" class="w-24 h-24 object-cover rounded-md border border-gray-200" onerror="this.src='https://via.placeholder.com/60'">
                 <div style="flex: 1;">
                     <div style="font-weight: 600;">${p.name}</div>
                     <div style="color: #666; font-size: 0.9em;">${p.category || 'Chưa phân loại'} - ${p.price || 'Liên hệ'}</div>
@@ -194,10 +209,26 @@ function loadProducts() {
                 </div>
             </div>`;
         });
-        adminProductList.innerHTML = html;
+
+        // Append new items
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        while (div.firstChild) {
+            adminProductList.appendChild(div.firstChild);
+        }
+
+        // Add "Load More" button if we got a full page
+        if (querySnapshot.size === PRODUCTS_PER_PAGE) {
+            const loadMoreBtn = document.createElement('div');
+            loadMoreBtn.id = 'btnLoadMoreProducts';
+            loadMoreBtn.className = 'text-center py-4';
+            loadMoreBtn.innerHTML = `<button onclick="loadProducts(true)" class="text-sago-600 font-medium hover:underline">Xem thêm sản phẩm cũ hơn <i class="fas fa-chevron-down"></i></button>`;
+            adminProductList.appendChild(loadMoreBtn);
+        }
+
     }).catch((error) => {
         console.error("Error loading products: ", error);
-        adminProductList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
+        if (!isNextPage) adminProductList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
     });
 }
 
@@ -313,17 +344,37 @@ cancelNewsEditBtn.addEventListener('click', () => {
     setNewsEditMode(false);
 });
 
-// Load News
-function loadNews() {
-    if (!adminNewsList) return;
-    adminNewsList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải...</p>';
+// Load News with Pagination
+let lastNewsVisible = null;
+const NEWS_PER_PAGE = 10;
 
-    db.collection("news").orderBy("createdAt", "desc").get().then((querySnapshot) => {
-        adminNewsList.innerHTML = '';
-        if (querySnapshot.empty) {
+function loadNews(isNextPage = false) {
+    if (!adminNewsList) return;
+
+    if (!isNextPage) {
+        adminNewsList.innerHTML = '<p style="text-align: center; color: #999;">Đang tải...</p>';
+        lastNewsVisible = null;
+    }
+
+    let query = db.collection("news").orderBy("createdAt", "desc").limit(NEWS_PER_PAGE);
+
+    if (isNextPage && lastNewsVisible) {
+        query = query.startAfter(lastNewsVisible);
+    }
+
+    query.get().then((querySnapshot) => {
+        if (!isNextPage) adminNewsList.innerHTML = '';
+        else {
+            const oldBtn = document.getElementById('btnLoadMoreNews');
+            if (oldBtn) oldBtn.remove();
+        }
+
+        if (querySnapshot.empty && !isNextPage) {
             adminNewsList.innerHTML = '<p style="text-align: center; padding: 1rem;">Chưa có bài viết nào.</p>';
             return;
         }
+
+        lastNewsVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
         let html = '';
         querySnapshot.forEach((doc) => {
@@ -343,10 +394,22 @@ function loadNews() {
                 </div>
             </div>`;
         });
-        adminNewsList.innerHTML = html;
+
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        while (div.firstChild) adminNewsList.appendChild(div.firstChild);
+
+        if (querySnapshot.size === NEWS_PER_PAGE) {
+            const loadMoreBtn = document.createElement('div');
+            loadMoreBtn.id = 'btnLoadMoreNews';
+            loadMoreBtn.className = 'text-center py-4';
+            loadMoreBtn.innerHTML = `<button onclick="loadNews(true)" class="text-sago-600 font-medium hover:underline">Xem thêm tin cũ hơn <i class="fas fa-chevron-down"></i></button>`;
+            adminNewsList.appendChild(loadMoreBtn);
+        }
+
     }).catch((error) => {
         console.error("Error loading news: ", error);
-        adminNewsList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
+        if (!isNextPage) adminNewsList.innerHTML = '<p style="color: red; text-align: center;">Lỗi tải dữ liệu.</p>';
     });
 }
 
@@ -432,7 +495,7 @@ async function insertContentImage(fileInputId, textareaId, btnId) {
     const fileInput = document.getElementById(fileInputId);
     const textarea = document.getElementById(textareaId);
     const btn = document.getElementById(btnId);
-    const originalText = btn.innerHTML;
+    const originalContent = btn.innerHTML;
 
     if (!fileInput.files[0]) {
         alert("Vui lòng chọn ảnh cần chèn!");
@@ -441,15 +504,25 @@ async function insertContentImage(fileInputId, textareaId, btnId) {
 
     try {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+        btn.innerText = "Đang tải ảnh lên...";
+        btn.style.opacity = "0.7";
 
         const file = fileInput.files[0];
-        // Use Base64 instead of Storage
-        const url = await fileToBase64(file);
+        // Create a reference to 'article_images' folder with a unique name
+        const storageRef = firebase.storage().ref();
+        const fileName = `article_images/${Date.now()}_${file.name}`;
+        const imageRef = storageRef.child(fileName);
 
-        // Insert into textarea
-        const imgTag = `\n<img src="${url}" alt="Ảnh minh họa" style="width: 100%; height: auto; border-radius: 8px; margin: 10px 0;">\n`;
+        // Upload file
+        await imageRef.put(file);
 
+        // Get Download URL
+        const url = await imageRef.getDownloadURL();
+
+        // Create HTML tag
+        const imgTag = `\n<img src="${url}" alt="Hình ảnh bài viết" style="max-width: 100%; height: auto;">\n`;
+
+        // Insert into textarea at cursor position
         if (textarea.selectionStart || textarea.selectionStart == '0') {
             const startPos = textarea.selectionStart;
             const endPos = textarea.selectionEnd;
@@ -465,10 +538,11 @@ async function insertContentImage(fileInputId, textareaId, btnId) {
 
     } catch (error) {
         console.error("Insert img error:", error);
-        alert("Lỗi xử lý ảnh: " + error.message);
+        alert("Lỗi tải ảnh: " + error.message);
     } finally {
         btn.disabled = false;
-        btn.innerHTML = originalText;
+        btn.innerHTML = originalContent;
+        btn.style.opacity = "1";
     }
 }
 

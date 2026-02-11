@@ -1,0 +1,518 @@
+/* 
+   Project: SAGO XANH - WP Admin Clone
+   Theme: WordPress Admin (Classic)
+   Author: Antigravity
+*/
+
+:root {
+    /* WP Core Colors */
+    --wp-admin-theme-color: #1d2327;
+    /* Sidebar Dark */
+    --wp-admin-theme-color-darker: #101517;
+    --wp-admin-theme-accent: #2271b1;
+    /* Standard WP Blue */
+    --wp-admin-theme-accent-hover: #135e96;
+    --wp-admin-theme-accent-focus: #0a4b78;
+
+    --body-background: #f0f0f1;
+    /* Light Gray Background */
+    --content-background: #ffffff;
+
+    --text-main: #3c434a;
+    /* Dark Gray Text */
+    --text-light: #646970;
+    /* Light Gray Text */
+
+    --border-color: #c3c4c7;
+    --border-focus: #2271b1;
+
+    /* Dimensions */
+    --admin-bar-height: 32px;
+    --sidebar-width: 160px;
+}
+
+/* Base Reset & Typography */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--body-background);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    line-height: 1.4em;
+}
+
+a {
+    color: var(--wp-admin-theme-accent);
+    text-decoration: none;
+    transition-property: border, background, color;
+    transition-duration: .05s;
+    transition-timing-function: ease-in-out;
+}
+
+a:hover,
+a:active {
+    color: var(--wp-admin-theme-accent-hover);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #1d2327;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* =========================================
+   LAYOUT STRUCTURE
+   ========================================= */
+
+/* 1. Admin Bar (Top) */
+#wpadminbar {
+    direction: ltr;
+    color: #c3c4c7;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: var(--admin-bar-height);
+    height: var(--admin-bar-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-width: 600px;
+    z-index: 99999;
+    background: var(--wp-admin-theme-color);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+#wpadminbar .ab-item {
+    color: #f0f0f1;
+    display: block;
+    padding: 0 10px;
+}
+
+#wpadminbar .ab-item:hover {
+    color: #72aee6;
+}
+
+/* 2. Admin Menu (Left Sidebar) */
+#adminmenuback,
+#adminmenuwrap {
+    background-color: var(--wp-admin-theme-color);
+    width: var(--sidebar-width);
+    position: fixed;
+    top: var(--admin-bar-height);
+    bottom: 0;
+    left: 0;
+    z-index: 9990;
+}
+
+#adminmenu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 10px;
+}
+
+#adminmenu li {
+    margin: 0;
+    padding: 0;
+}
+
+#adminmenu a {
+    display: block;
+    line-height: 18px;
+    padding: 10px 12px;
+    color: #f0f0f1;
+    font-weight: 400;
+    font-size: 14px;
+    border-left: 4px solid transparent;
+    /* Highlight indicator */
+}
+
+#adminmenu a:hover,
+#adminmenu a:focus {
+    background-color: #101517;
+    color: #72aee6;
+}
+
+#adminmenu li.current a,
+#adminmenu a.active {
+    background-color: var(--wp-admin-theme-accent);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    /* WP style active state */
+}
+
+#adminmenu div.wp-menu-image {
+    float: left;
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    margin-right: 8px;
+    text-align: center;
+}
+
+#adminmenu a:hover div.wp-menu-image,
+#adminmenu li.current div.wp-menu-image,
+#adminmenu a.active div.wp-menu-image {
+    opacity: 1;
+}
+
+/* 3. Main Content Area */
+#wpcontent {
+    margin-left: var(--sidebar-width);
+    padding-top: var(--admin-bar-height);
+    height: 100%;
+}
+
+#wpbody-content {
+    padding: 10px 20px 0 20px;
+    padding-bottom: 65px;
+}
+
+/* Page Titles */
+.wrap h1.wp-heading-inline {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 23px;
+    font-weight: 400;
+    padding: 9px 0 4px 0;
+    line-height: 1.3;
+}
+
+.page-title-action {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 4px 8px;
+    position: relative;
+    top: -3px;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.5;
+    height: 28px;
+    border: 1px solid #2271b1;
+    border-radius: 3px;
+    background: #f6f7f7;
+    color: #2271b1;
+    cursor: pointer;
+    transition: none;
+}
+
+.page-title-action:hover {
+    background: #f0f0f1;
+    border-color: #0a4b78;
+    color: #0a4b78;
+}
+
+/* =========================================
+   COMPONENTS: TABLES (WP List Table)
+   ========================================= */
+.wp-list-table {
+    width: 100%;
+    border-spacing: 0;
+    clear: both;
+    margin: 0;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    border: 1px solid #c3c4c7;
+}
+
+.wp-list-table thead th,
+.wp-list-table tfoot th {
+    border-bottom: 1px solid #c3c4c7;
+    padding: 8px 10px;
+    font-weight: 400;
+    text-align: left;
+    color: #1d2327;
+    vertical-align: top;
+}
+
+.wp-list-table tfoot th {
+    border-top: 1px solid #c3c4c7;
+    border-bottom: none;
+}
+
+.wp-list-table tbody td {
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.5em;
+    color: #3c434a;
+    vertical-align: top;
+    border-bottom: 1px solid #f0f0f0;
+    /* Lighter separator */
+}
+
+/* Striping */
+.wp-list-table tbody tr:nth-child(2n+1) {
+    background-color: #f9f9f9;
+}
+
+.wp-list-table tbody tr:hover {
+    background-color: #fbfbfb;
+}
+
+/* Images in Table */
+.column-thumbnail {
+    width: 50px;
+}
+
+.column-thumbnail img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+/* Row Actions (Edit | Delete) */
+.row-actions {
+    visibility: hidden;
+    font-size: 13px;
+    padding: 2px 0 0;
+}
+
+.wp-list-table tr:hover .row-actions {
+    visibility: visible;
+}
+
+.row-actions span.edit a {
+    color: #2271b1;
+}
+
+.row-actions span.trash a {
+    color: #b32d2e;
+}
+
+/* =========================================
+   COMPONENTS: FORMS & INPUTS
+   ========================================= */
+.form-wrap {
+    margin-top: 20px;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=number],
+input[type=search],
+input[type=tel],
+input[type=url],
+textarea,
+select {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 0 8px;
+    line-height: 2;
+    min-height: 30px;
+    box-shadow: 0 0 0 transparent;
+    color: #3c434a;
+    width: 100%;
+    max-width: 100%;
+    /* Or specific form max-width */
+    background-color: #fff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: 2px solid transparent;
+}
+
+/* Buttons */
+.button,
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.button-primary,
+.btn-primary {
+    background: var(--wp-admin-theme-accent);
+    border-color: var(--wp-admin-theme-accent);
+    color: #fff;
+}
+
+.button-primary:hover,
+.btn-primary:hover {
+    background: var(--wp-admin-theme-accent-hover);
+    border-color: var(--wp-admin-theme-accent-hover);
+    color: #fff;
+}
+
+.button-secondary,
+.btn-secondary {
+    color: #2271b1;
+    border-color: #2271b1;
+    background: #f6f7f7;
+    vertical-align: top;
+}
+
+.button-secondary:hover {
+    background: #f0f0f1;
+    border-color: #0a4b78;
+    color: #0a4b78;
+}
+
+/* Card-like wrappers for Forms (Postbox) */
+.postbox {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    margin-bottom: 20px;
+    padding: 0;
+    min-width: 255px;
+    position: relative;
+}
+
+.postbox-header {
+    border-bottom: 1px solid #c3c4c7;
+    padding: 8px 12px;
+    margin: 0;
+}
+
+.postbox-header h2 {
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.postbox-body {
+    padding: 12px;
+}
+
+/* =========================================
+   TOAST NOTIFICATIONS (WP Notices)
+   ========================================= */
+#toast-container {
+    position: fixed;
+    top: 40px;
+    /* Below admin bar */
+    right: 20px;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #fff;
+    border-left: 4px solid #00a0d2;
+    /* Default Info */
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+    padding: 1px 12px;
+    min-width: 200px;
+    max-width: 400px;
+    position: relative;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.toast.success {
+    border-left-color: #46b450;
+}
+
+.toast.error {
+    border-left-color: #dc3232;
+}
+
+.toast.info {
+    border-left-color: #72aee6;
+}
+
+.toast-message {
+    padding: 11px 0;
+    display: block;
+    font-size: 13px;
+}
+
+.toast-icon {
+    display: none;
+}
+
+/* WP notices rarely use icons inline like that, usually just border color */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+/* =========================================
+   CUSTOM LAYOUT UTILS
+   ========================================= */
+/* Columns for forms (WP "Screen Options 2 columns" feel) */
+.wp-columns-2 {
+    display: flex;
+    gap: 20px;
+}
+
+.wp-col-main {
+    flex: 3;
+}
+
+.wp-col-side {
+    flex: 1;
+}
+
+@media screen and (max-width: 782px) {
+
+    #adminmenuback,
+    #adminmenuwrap {
+        display: none;
+        /* Todo: mobile menu */
+    }
+
+    #wpcontent {
+        margin-left: 0;
+    }
+
+    .wp-columns-2 {
+        flex-direction: column;
+    }
+}
